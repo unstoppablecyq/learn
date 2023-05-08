@@ -1,3 +1,9 @@
+
+
+
+
+
+
 import java.util.Scanner;//µº»ÎScanner¿‡
 public class input{
 
