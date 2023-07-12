@@ -2818,17 +2818,17 @@ Map接口实现类-Properties
 1. 先判断存储的类型(一组对象[单列]或一组键值对[双列])
    1. 一组对象[单列]：Collection接口
       		允许重复：List
-      				增删多：LinkedList[底层维护了一个双向链表]
-      				改查多: ArrayList [底层维护 Object类型的可变数组]
-      		不允许重复：Set
-      				无序：HashSet [底层是HashMap ，维护了一个哈希表 即(数组+链表+红黑树)]
-      				排序: TreeSet
-      				插入和取出顺序一致: LinkedHashSet，维护数组+双向链表
+         				增删多：LinkedList[底层维护了一个双向链表]
+         				改查多: ArrayList [底层维护 Object类型的可变数组]
+         		不允许重复：Set
+         				无序：HashSet [底层是HashMap ，维护了一个哈希表 即(数组+链表+红黑树)]
+         				排序: TreeSet
+         				插入和取出顺序一致: LinkedHashSet，维护数组+双向链表
 2. 一组键值对[双列]: Map
    		键无序: HashMap [底层是: 哈希表 jdk7: 数组+链表，jdk8: 数组+链表+红黑树]
-   		键排序: TreeMap
-   		键插入和取出顺序一致: LinkedHashMap
-   		读取文件 Properties
+      		键排序: TreeMap
+      		键插入和取出顺序一致: LinkedHashMap
+      		读取文件 Properties
 
 ##### Collections工具类
 
@@ -3236,55 +3236,141 @@ getName、getAbsolutePath、getParent、 length、exists、isFile、isDirectory
 
 ##### IO流体系图-常用的类
 
+![IO流体系图](./javatests/pics/IO流体系图.png)
+
+FileInputStream
+
+FileOutputStream
+	![FileOutputStream图](./javatests/pics/FileOutputStream图.png)
+
+FileReader
+
+​	![FileReader图](./javatests/pics/FileReader图.png)
+
+FileWriter
+
+​	![FileWriter图](./javatests/pics/FileWriter图.png)
+
+FileReader相关方法
+
+1. new FileReader(File/String)
+2. read:每次读取单个字符，返回该字符，如果到文件未尾返回-1
+3. read(char[]): 批量读取多个字符到数组，返回读取到的字符数，如果到文件未尾返回相关API:
+   1. new String(char[]):将char[]转换成String
+   2. new String(char[],off,len):将char[]的指定部分转换成String
+
+FileWriter常用方法
+
+1. new FileWriter(File/String): 覆盖模式，相当于流的指针在首端
+2. new FileWriter(File/String,true): 追加模式，相当于流的指针在尾端
+3. write(int):写入单个字符
+4. write(char[]):写入指定数组
+5. write(char[],off,len):写入指定数组的指定部分
+6. write (string) : 写入整个字符串
+7. write(string,off,len):写入字符串的指定部分
+   相关API: String类: toCharArray:将String转换成char[]
+
+ 注意:
+FileWriter使用后，必须要关闭(close)或刷新(flush)，否则写入不到指定的文件!
+
+##### 字节流和处理流
+
+- 节点流可以从一个特定的数据源读写数据，如FileReader、FileWriter
+- 处理流(也叫包装流是“连接”在已存在的流(节点流或处理流)之上，为程序提供更为强大的读写功能，也更加灵活, 如BufferedReader、BufferedWriter
+
+一览图
+
+![字节流和处理流一览图](./javatests/pics/字节流和处理流一览图.png)
+
+**字节流和处理流的区别和联系**
+
+- 节点流是底层流/低级流,直接跟数据源相接
+- 处理流(**包装流**)包装节点流，既可以消除不同节点流的实现差异，也可以提供更方便的方法来完成输入输出。
+- 处理流(也叫包装流)对节点流进行包装，使用了修饰器设计模式，不会直接与数据源相连[模拟修饰器设计模式]
+
+**处理流的功能**
+
+- 性能的提高:主要以增加缓冲的方式来提高输入输出的效率。
+- 操作的便捷: 处理流可能提供了一系列便捷的方法来一次输入输出大批量的数据，使用更加灵活方便
+
+**处理流-BufferedReader和BufferedWriter**
+
+- 都属于字符流，是anz凹字符来读取数据的
+- 关闭时处理流，只需要关闭外层流即可
+
+**处理流-BufferedInputStream和BufferedOutputStream**
+
+- BufferedInputStream是字节流，在创建BufferedInputStream时会创建一个内部缓冲区数组。
+- BufferedOutputStream是字节流，实现缓冲的输出流，可以将多个字节写入底层输出流中，而不必对每次字节写入调用底层系统
+
+**对象流-ObjectInputStream和ObjectOutputStream**
+
+- 序列化和反序列化
+- 序列化就是在保存数据时，保存**数据的值**和**数据类型**
+- 反序列化就是在恢复数据时，恢复**数据的值**和**数据类型**需要让某个对象支持序列化机制，则必须让其类是可序列化的，为了让某个类是可序列化的，该类必须实现如下两个接口之一:
+  - Serializable // 这是一个标记接口,没有方
+  - Externalizable // 该接口有方法需要实现，因此我们一般实现上面的 Serializable接口
+
+对象流：提供了对基本类型或对象类型的序列化和反序列化的方法
+
+ObjectInputStream提供序列化功能
+
+ObjectOutputStream提供反序列化功能
 
 
 
+**使用事项和注意说明**
+
+1. 读写顺序要一致
+2. 要求序列化或反序列化对象 ，需要实现Serializable
+3. 序列化的类中建议添加SerialVersionUID，为了提高版本的兼容性
+4. 序列化对象时，默认将里面所有属性都进行序列化，但除了static或transient修饰的成员
+5. 序列化对象时，要求里面属性的类型也需要实现序列化接口
+6. 序列化具备可继承性,也就是如果某类已经实现了序列化，则它的所有子类也已经默认实现了序列化
+
+**标准输入输出流**
+
+- System.in.标准输，类型：InputStream，默认设备：键盘
+- System.out 标准输出，类型：PrintStream，默认设备：显示器
+
+**转换流-InputStreamReader 和 OutputStreamWriter**
+
+1. InputStreamReader:Reader的子类，可以将InputStream(字节流)包装成(**转换**)Reader(字符流)
+2. OutputStreamWriter:Writer的子类，实现将OutputStream(字节流)包装成Writer(字符流)
+3. 当处理纯文本数据时，如果使用字符流效率更高，并且可以有效解决中文问题，所以建议将字节流转换成字符流
+4. 可以在使用时指定编码格式(比如 utf-8，gbk，gb2312，ISO8859-1等)
+
+**打印流-PrintStream和PrintWriter**
+
+打印流只有输出流没有输入流
 
 
 
+##### Properties类
 
+**基本介绍**
 
+1. 专门用于读写配置文件的集合类
+   配置文件的格式:
+   键=值
+   键=值
 
+2. 注意: 键值对不需要有空格，值不需要用引号一起来。默认类型是String
 
+3. Properties的常见方法：
 
+   - load:加载配置文件的键值对到Properties对象
 
+   - list:将数据显示到指定设备
 
+   - getProperty(key):根据键获取值
 
+   - setProperty(key,value):设置键值对到Properties对象
 
+   - store:将Properties中的键值对存储到配置文件,在idea 中，保存信息到配置文件，如果含有中文，会存储为unicode码
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+http://tool.chinaz.com/tools/unicode.aspx 
+unicode码查询工具
 
 
 
@@ -3292,19 +3378,463 @@ getName、getAbsolutePath、getParent、 length、exists、isFile、isDirectory
 
 #### 第20章 项目-坦克大战-3
 
+
+
 #### 第21章 网络编程
 
-#### 第22章 多用户即时通信系统
+网络通信
+
+1. 概念:两台设备之间通过网络实现数据传输
+2. 网络通信: 将数据通过网络从一台设备传输到另一台设备
+3. java.net包下提供了一系列的类或接口，供程序员使用，完成网络通信
+
+网络
+
+两台或多台设备通过一定物理设备连接起来构成了网络
+
+根据网络的覆盖范围不同，对网络进行分类:
+
+- 局域网:覆盖范围最小，仅仅覆盖一个教室或一个机房
+- 城域网: 覆盖范围较大，可以覆盖一个城市
+- 广域网:覆盖范围最大，可以覆盖全国，甚至全球，万维网是广域网的代表
+
+ip地址
+
+1. 概念: 用于唯一标识网络中的每台计算机/主机
+2. 查看ip地址: ipconfig
+3. ip地址的表示形式:点分+进制xx.xx.xx.xx
+4. 每一个十进制数的范围: 0~255
+5. ip地址的组成=网络地址+主机地址，比如:192.168.16.69
+6. iPv6是互联网工程任务组设计的用于替代IPv4的下一代IP协议，其地址数量号称可以为全世界的每一粒沙子编上一个地址。
+7. 由于IPv4最大的问题在于网络地址资源有限，严重制约了互联网的应用和发展。IPv6的使用，不仅能解决网络地址资源数量的问题，而且也解决了多种接入设备连入互联网的障碍
+
+ipv4地址分类
+
+![ipv4地址分类](./javatests/pics/ipv4地址分类.png)
+
+域名：将ip地址映射成域名->HTTP协议
+
+端口号
+
+1. 概念: 用于标识计算机上某个特定的网络程序
+
+2. 表示形式: 以整数形式，端口范围0~65535 [2个字节表示端口 0~2^16-1]
+
+3. 0~1024已经被占用,比如 ssh 22, ftp 21,smtp 25 http 80
+
+4. 常见的网络程序端口号:
+
+   - tomcat :8080
+
+   - mysql:3306
+
+   - oracle:1521
+
+   - sqlserver:1433
+
+TCP/IP，传输控制协议/因特网互联协议
+
+OSI模型-TCOP/IP模型-协议
+
+TCP和UDP
+
+- TCP协议: 传输控制协议
+  - 使用TCP协议前，须先建立TCP连接，形成传输数据通道
+  - 传输前，采用"三次握手"方式，是**可靠的**
+  - TCP协议进行通信的两个应用进程: 客户端、服务端
+  - 在连接中可进行大数据量的传输
+  - 传输完毕，需释放已建立的连接，**效率低**
+- UDP协议: 用户数据协议
+  - 将数据、源、目的封装成数据包，不需要建立连接
+  - 每个数据报的大小限制在64K内, 不适合传输大量数据
+  - 因无需连接，故是**不可靠的**
+  - 发送数据结束时无需释放资源(因为不是面向连接的)，速度快
+  - 举例: 厕所通知: 发短信
+
+##### InetAddress类
+
+相关方法：
+
+获取本机InetAddress对象 getLocalHost
+
+根据指定主机名/域名获取ip地址对象 getByName
+
+获取InetAddress对象的主机名 getHostName
+
+获取InetAddress对象的地址 getHostAddress
+
+##### Socket
+
+基本介绍：
+
+1. 套接字(Socket)开发网络应用程序被广泛采用，以至于成为事实上的标准
+2. 通信的两端都要有Socket，是两台机器间通信的端点
+3. 网络通信其实就是Socket间的通信。
+4. Socket允许程序把网络连接当成一个流，数据在两个Socket间通过IO传输
+5. 一般主动发起通信的应用程序属客户端，等待通信请求的为服务端
+
+示意图：
+
+![Socket示意图](./javatests/pics/Socket示意图.png)
+
+##### TCP网络通信编程
+
+基本介绍：
+
+1. 基于客户端一服务端的网络通信
+2. 底层使用的是TCP/IP协议
+3. 应用场景举例: 客户端发送数据，服务端接受并显示控制台
+4. 基于Socket的TCP编程
+
+**netstat指令**
+
+- netstat -an 可以查看当前主机网络情况，包括**端口监听**情况和**网络连接**情况
+- netstat -an | more 可以分页显示
+- 要求在dos控制台下执行win+r
+
+说明:
+
+1. Listening 表示某个端口在监听
+2. 如果有一个外部程序(客户端)连接到该端口，就会显示一条连接信息
+3. 可以输入ctrl + c 退出指令
+
+
+
+TCP网络通讯
+
+当客户端连接到服务端后，实际上客户端也是通过一个端口和服务端进行通讯的，这个端口是TCP/IP 来分配的，是不确定的，是随机的。
+
+程序验证+netstat
+
+
+
+UDP网络通信编程（了解即可）
+
+- 类 DatagramSocket 和 DatagramPacket[数据包/数据报]实现了基于 UDP协议网络程序。
+- UDP数据报通过数据报套接字 DatagramSocket 发送和接收，系统不保证UDP数据报一定能够安全送到目的地，也不能确定什么时候可以抵达
+- DatagramPacket 对象封装了UDP数据报，在数据报中包含了发送端的IP地址端口号以及接收端的IP地址和端口号。
+- UDP协议中每个数据报都给出了完整的地址信息，因此无须建立发送方和接收方的连接
+
+基本流程：
+
+1. 核心的两个类/对象 DatagramSocket与DatagramPacket
+2. 建立发送端，接收端(没有服务端和客户端概念)
+3. 发送数据前，建立数据包/报 DatagramPacket对象
+4. 调用DatagramSocket的发送、接收方法
+5. 关闭DatagramSocket
+
+#### 第22章 多用户即时通信系统（项目）
+
+
 
 #### 第23章 反射(REFLECTION)
 
+##### Java Reflection
+
+- 反射机制允许程序在执行期借助于ReflectionAPI取得任何类的内部信息(比如成员变量，构造器，成员方法等等)，并能操作对象的属性及方法。反射在设计模式和框架底层都会用到
+- 加载完类之后，在堆中就产生了一个Class类型的对象 (一个类只有一个Class对象)，这个对象包含了类的完整结构信息。通过这个对象得到类的结构。这个Class对象就像一面镜子，透过这个镜子看到类的结构，所以，形象的称之为:反射
+
+**Java反射机制原理示意图!!**
+
+![Java反射机制原理示意图](./javatests/pics/Java反射机制原理示意图.png)
+
+Java反射机制可以完成：
+
+1. 在运行时判断任意一个对象所属的类
+2. 在运行时构造任意一个类的对象
+3. 在运行时得到任意一个类所具有的成员变量和方法
+4. 在运行时调用任意一个对象的成员变量和方法
+5. 生成动态代理
+
+反射相关的主要类：（这些类在java.lang.reflection）
+
+- java.lang.Class:代表一个类， Class对象表示某个类加载后在堆中的对象
+- java.lang.reflect.Method: 代表类的方法,Method对象表示某个类的方法
+- java.lang.reflect.Field: 代表类的成员变量, Field对象表示某个类的成员变量
+- java.lang.reflect.Constructor: 代表类的构造方法，Constructor对象表示构造器
+
+**反射优缺点**
+
+- 优点: 可以动态的创建和使用对象(也是框架底层核心)，使用灵活,没有反射机制，框架技术就失去底层支撑。
+- 缺点: 使用反射基本是解释执行，对执行速度有影响
+
+反射调用优化-关闭访问检查
+
+- Method和Field、Constructor对象都有setAccessible0方法
+- setAccessible作用是启动和禁用访问安全检查的开关
+- 参数值为true表示 反射的对象在使用时取消访问检查，提高反射的效率。参数值为false则表示反射的对象执行访问检查
+
+##### Class类
+
+Class也是类，因此也继承Object类
+
+Class类对象不是new出来的，而是系统创建的
+
+对于某个类的Class类对象，在内存中只有一份，因为类只加载一次
+
+每个类的实例都会记得自己是由哪个 Class 实例所生成
+
+通过Class对象可以完整地得到一个类的完整结构,通过一系列API
+
+Class对象是存放在堆的
+
+类的字节码二进制数据，是放在方法区的，有的地方称为类的元数据(包括方法代码变量名，方法名，访问权限等等) https://www.zhihu.com/question/38496907
+
+**常用方法**
+
+![Class类的常用方法](./javatests/pics/Class类的常用方法.png)
+
+##### 获取Class类对象
+
+1. 前提: 已知一个类的全类名，且该类在类路径下，可通过Class类的静态方法forName()获取，可能抛出ClassNotFoundException，实例: Class cls1 =Class.forName("java.lang.Cat”);
+   应用场景:多用于配置文件,读取类全路径，加载类
+2. 前提: 若已知具体的类，通过类的class 获取，该方式 最为安全可靠，程序性能最高实例: Class cls2 = Cat.class;
+   应用场景:多用于参数传递，比如通过反射得到对应构造器对象
+3. 前提: 已知某个类的实例，调用该实例的getClass0方法获取Class对象，实例:Class clazz = 对象.getClass0://运行类型
+   应用场景: 通过创建好的对象，获取Class对象
+4. 其他方式
+   ClassLoader cl = 对象.getClass().getClassLoader();
+   Class clazz4 = cl.loadClass(“类的全类名”);
+5. 基本数据(int, char,boolean,float,double,byte,long,short)按如下方式得到Class类对象
+   Class cls = 基本数据类型.class
+6. 基本数据类型对应的包装类，可以通过.TYPE 得到Class类对象
+   Class cls = 包装类.TYPE
+
+##### 哪些类型有Class对象
+
+1. 外部类，成员内部类，静态内部类，局部内部类，匿名内部类
+2. interface:接口
+3. 数组
+4. enum:枚举
+5. annotation:注解
+6. 基本数据类型
+7. void
+
+##### 类加载
+
+**基本说明**
+
+反射机制是java实现动态语言的关键，也就是通过反射实现类动态加载。
+
+- 静态加载:编译时加载相关的类，如果没有则报错，依赖性太强
+- 动态加载:运行时加载需要的类，如果运行时不用该类，即使不存在该类，则不报2错，降低了依赖性
+
+**类加载时机**
+
+当创建对象时 (new) //静态加载
+
+当子类被加载时，父类也加载 //静态加载
+
+调用类中的静态成员时 //静态加载
+
+通过反射 //动态加载
+
+**类加载过程图**
+
+![类加载过程图](./javatests/pics/类加载过程图.png)
+
+**类加载各阶段完成任务**
+
+![类加载各阶段完成任务](./javatests/pics/类加载各阶段完成任务.png)
+
+**加载阶段**
+
+JVM 在该阶段的主要目的是将字节码从不同的数据源 (可能是 class 文件、也可能是jar包，甚至网络)转化为**二进制字节流加载到内存中**，并生成一个代表该类的java.lang.Class 对象
+
+**连接阶段-验证**
+
+1. 目的是为了确保 Class 文件的字节流中包含的信息符合当前虚拟机的要求，并且不会危害虚拟机自身的安全
+2. 包括: 文件格式验证(是否以魔数 oxcafebabe开头)、元数据验证、字节码验证和符号引用验证[举例说明]
+3. 可以考虑使用 -Xverify:none 参数来关闭大部分的类验证措施，缩短虚拟机类加载的时间。
+
+**连接阶段-准备**
+
+JVM 会在该阶段对静态变量，分配内存并默认初始化(对应数据类型的默认初始值，如 0、0L、null、false 等) 。这些变量所使用的内存都将在方法区中进行分配。
+
+**连接阶段-解析**
+
+虚拟机将常量池内的符号引用替换为直接引用的过程
+
+**Initialization (初始化)**
+
+1. 到初始化阶段，才真正开始执行类中定义的 Java 程序代码，此阶段是执行<clinit>() 方法的过程。
+2. <clinit>()方法是编译器按语句在源文件中出现的顺序，依次自动收集类中的所有**静态变量**的赋值动作和**静态代码块**中的语句，并进行合并。
+3. 虚拟机会保证一个类的 <clinit>() 方法在多线程环境中被正确地加锁、同步，如果多个线程同时去初始化一个类，那么只会有一个线程去执行这个类的 <clinit>()方法，其他线程都需要阻塞等待，直到活动线程执行 <clinit>() 方法完毕
+
+
+
+**通过反射获取类的结构信息**
+
+java.lang.Class 类：
+
+1. getName:获取全类名
+2. getSimpleName:获取简单类名
+3. getFields:获取所有public修饰的属性，包含本类以及父类的
+4. getDeclaredFields:获取本类中所有属性
+5. getMethods:获取所有public修饰的方法，包含本类以及父类的
+6. getDeclaredMethods:获取本类中所有方法
+7. getConstructors: 获取本类所有public修饰的构造器
+8. getDeclaredConstructors;获取本类中所有构造器
+9. getPackage:以Package形式返回 包信息
+10. getSuperClass:以Class形式返回父类信息
+11. getInterfaces:以Class[]形式返回接口信息
+12. getAnnotations:以Annotation[]形式返回注解信息
+
+java.lang.reflect.Field 类：
+
+1. getModifiers: 以int形式返回修饰符
+   [说明: 默认修饰符 是0， public 是1 ，private 是 2protected 是4static 是8，final 是 16] , public(1) + static (8) = 9
+2. getType:以Class形式返回类型
+3. getName:返回属性名
+
+java.lang.reflect.Method 类:
+
+1. getModifiers:以int形式返回修饰符
+   [说明: 默认修饰符 是0，public 是1，private 是2，protected 是4,static 是8，final 是16]
+2. getReturnType:以Class形式获取 返回类型
+3. getName:返回方法名
+4. getParameterTypes:以Class[]返回参数类型数组
+
+java.lang.reflect.Constructor 类
+
+getModifiers: 以int形式返回修饰符
+
+getName:返回构造器名 (全类名)
+
+getParameterTypes:以Class[]返回参数类型数组
+
+
+
+##### 通过反射创建对象
+
+- 方式一:调用类中的public修饰的无参构造器
+- 方式二:调用类中的指定构造器
+- Class类相关方法
+  - newInstance : 调用类中的无参构造器，获取对应类的对象
+  - getConstructor(Class...clazz):根据参数列表，获取对应的public构造器对象
+  - getDecalaredConstructor(Class...clazz):根据参数列表，获取对应的所有构造器对象
+- Constructor类相关方法
+- setAccessible:暴破
+- newInstance(Object...obj):调用构造器
+
+##### 通过反射访问类中的成员
+
+**访问属性**
+
+1. 根据属性名获取Field对象
+   Field f = clazz对象.getDeclaredField(属性名);
+2. 暴破 : f.setAccessible(true); //f 是Field
+3. 访问
+   f.set(o,值); // o 表示对象
+   syso(f.get(o))://o 表示对象
+4. 注意: 如果是静态属性，则set和get中的参数o，可以写成null
+
+**访问方法**
+
+1. 根据方法名和参数列表获取Method方法对象 : Method m =clazz.getDeclaredMethod(方法名，XX.class);//得到本类的所有方法
+2. 获取对象: Object o=clazz.newlnstance();
+3. 暴破 : m.setAccessible(true);
+4. 访问:Object returnValue = m.invoke(o,实参列表)://o 就是对象
+5. 注意: 如果是静态方法，则invoke的参数o，可以写成null!
+
 #### 第24章 MYSQL
+
+
+
+
 
 #### 第25章 JDBC和数据库连接池
 
+
+
 #### 第26章 满汉楼
 
+
+
 #### 第27章 正则表达式
+
+- 一个正则表达式，就是用某种模式去匹配字符串的一个公式。很多人因为它们看上去比较古怪而且复杂所以不敢去使用，不过，经过练习后，就觉得这些复杂的表达式写起来还是相当简单的，而且，一旦你弄懂它们，你就能把数小时辛苦而且易错的文本处理工作缩短在几分钟至几秒钟)内完成
+- 正则表达式不是只有java才有，实际上很多编程语言都支持正则表达式进行字符串操作
+
+##### **底层实现**
+
+看实例分析
+
+##### 语法
+
+**基本介绍**
+
+如果要想灵活的运用正则表达式，必须了解其中各种元字符的功能，元字符从功能上大致分为:
+
+1. 限定符
+2. 选择匹配符
+3. 分组组合和反向引用符
+4. 特殊字符
+5. 字符匹配符
+6. 定位符
+
+**元字符(Metacharacter)-转义号 \\\ **
+
+在 Java 的正则表达式中，两个\代表其他语言中的一个\
+
+需要用到转义符号的字符有以下: .* +()$/\?[]^{}
+
+**元字符-字符匹配符**
+
+![字符匹配符-1](./javatests/pics/字符匹配符-1.png)
+
+![字符匹配符-2](./javatests/pics/字符匹配符-2.png)
+
+**元字符-选择匹配符**
+
+在匹配某个字符串的时候是选择性的，即: 既可以匹配这个，又可以匹配那个，这时需要用到选择匹配符号 |
+
+**元字符-限定符**
+
+用于指定其前面的字符和组合项连续出现多少次
+
+![元字符-限定符](./javatests/pics/元字符-限定符.png)
+
+**元字符-定位符**
+
+定位符, 规定要匹配的字符串出现的位置，比如在字符串的开始还是在结束的位置，这个也是相当有用的，必须掌握
+
+![定位符](./javatests/pics/定位符.png)
+
+**分组**
+
+![分组-1](./javatests/pics/分组-1.png)
+
+![分组-2](./javatests/pics/分组-2.png)
+
+##### 正则表达式三个常用类
+
+- Pattern 类
+  pattern 对象是一个正则表达式对象。Pattern 类没有公共构造方法。要创建一个 Pattern 双象，调用其公共静态方法，它返回一个 Pattern 对象。该方法接受一个正则表达式作为它的个参数,比如: Pattern r = Pattern.compile(pattern);
+- Matcher 类
+  Matcher 对象是对输入字符串进行解释和匹配的引擎。与Pattern 类一样，Matcher 也没有公共构造方法。你需要调用 Pattern 对象的 matcher 方法来获得一个 Matcher 对象
+- PatternSyntaxException
+  PatternSyntaxException 是一个非强制异常类，它表示一个正则表达式模式中的语法错误
+
+##### 分组、捕获、反向引用
+
+1. 分组
+   我们可以用圆括号组成一个比较复杂的匹配模式，那么一个圆括号的部分我们可以看作是一个子表达式/一个分组。
+2. 捕获
+   把正则表达式中子表达式/分组匹配的内容，保存到内存中以数字编号或显式命名的组里，方便后面引用，从左向右，以分组的左括号为标志，第一个出现的分组的组号为1，第二个为2，以此类推。组0代表的是整个正则式
+3. 反向引用
+   圆括号的内容被捕获后，可以在这个括号后被使用，从而写出一个比较实用的匹配模式，这个我们称为**反向引用**，这种引用既可以是在正则表达式内部，也可以是在正则表达式外部，内部反向引用**\\\分组号**，外部反向引用 **$分组号**
+
+##### String类中使用正则表达式
+
+- 替换功能
+  String 类 public String replaceAll(String regex,String replacement)
+- 判断功能
+  String 类 public boolean matches(String regex)  /**/使用 Pattern 和 Matcher 类**
+- 分割功能
+  String 类 public Stringl] split(String regex)
+
+
 
 #### 第28章 算法优化体验-其实周游问题
 
