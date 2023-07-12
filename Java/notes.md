@@ -1947,9 +1947,9 @@ new 类或接口(参数列表){
 class Outer01{	//外部类
 	private int n1 = 10;
 	public String name = "张三";
-class Innter01{
-	public void say(){
-		System.out.println("Outer01的n1 = " + n1 + " outer01的name = " + name );
+	class Innter01{
+		public void say(){
+			System.out.println("Outer01的n1 = " + n1 + " outer01的name = " + name );
 }}}
 
 //2.可以添加任意访问修饰符(public、protected 、默认、private),因为它的地位就是一个成员
@@ -1972,33 +1972,1323 @@ class Innter01{
 6. 外部其他类---访问----->静态内部类
 7. 如果外部类和静态内部类的成员重名时，静态内部类访问的时，默认遵循就近原则，如果想访问外部类的成员，则可以使用 (外部类名.成员)去访问
 
-
-
-
-
-p389
+p424
 
 #### 第11章 枚举和注解
 
+##### 枚举(enumeration)
+
+枚举（简写enum）是一组常量的集合，枚举属于一种特殊的类，里面只包含一组有限的特定的对象。
+
+两种实现方式：
+自定义类实现枚举
+使用 enum关键字实现枚举
+
+自定义类实现枚举：
+
+- 不需要提供setXxx方法，因为枚举对象值通常为只读
+- 对枚举对象/属性使用 final + static 共同修饰，实现底层优化
+- 枚举对象名通常使用全部大写，常量的命名规范
+- 枚举对象根据需要，也可以有多个属性
+
+特点：
+
+构造器私有化
+
+本类内部创建一组对象[四个 春夏秋冬]
+
+对外暴露对象(通过为对象添加 public final static 修饰符)
+
+可以提供 get 方法，但是不要提供 set
+
+注意事项：
+
+当我们使用enum关键字开发一个枚举类时，默认会继承Enum类，而且是一个final类
+
+传统的 public static final Season2 SPRING = new Season2("春天"，"温暖")；简化成 SPRING(”春天"，"温暖")， 这里必须知道，它调用的是哪个构造器。
+
+如果使用无参构造器创建枚举对象，则实参列表和小括号都可以省略
+
+当有多个枚举对象时，使用“,”间隔，最后有一个分号结尾
+
+枚举对象必须放在枚举类的行首.
+
+##### enum常用方法
+
+enum常用方法说明：
+
+使用关键字enum时，会隐式继承Enum类，这样我们就可以使用Enum类相关的方法。
+
+```java
+public abstract class Enum<E extends Enum<E>>
+	implements Comparable<E>,Serializable{
+	}
+```
+
+![enum常用方法](./javatests/pics/enum常用方法.png)
+
+toString：Enum类已经重写过了，返回的是当前对象名，子类可以重写该方法，用于返回对象的属性信息
+
+name：返回当前对象名 (常量名) ，子类中不能重写
+
+ordinal：返回当前对象的位置号，默认从0开始
+
+values：返回当前枚举类中所有的常量
+
+valueOf：将字符串转换成枚举对象，要求字符串必须为已有的常量名，否则报异常!
+
+compareTo：比较两个枚举常量，比较的就是编号!
+
+##### enum实现接口
+
+```java
+//使用 enum 关键字后，就不能再继承其它类了，因为 enum 会隐式继承 Enum，而 Java 是单继承机制。
+
+//枚举类和普通类一样，可以实现接口，如下形式：
+
+enum 类名 implements 接口 1，接口2{}
+
+
+```
 
 
 
+##### 注解（Annotation）
+
+注解(Anmotation)也被称为元数据(Metadata)，用于修饰解释 包、类、方法、属性、构造器、局部变量等数据信息。
+
+和注释一样，注解不影响程序逻辑，但注解可以被编译或运行，相当于嵌入在代码中的补充信息.
+
+在JavaSE中，注解的使用目的比较简单，例如标记过时的功能，忽略警告等。在JavaEE中注解占据了更重要的角色，例如用来配置应用程序的任何切面，代替java EE旧版中所遗留的繁冗代码和 XML 配置等。
+
+**基本介绍：**
+
+使用Annotation 时要在其前面增加 @ 符号并把该Anotation当成一个修饰符使用。用于修饰它支持的程序元素
+	三个基本的 Annotation：
+@Override：限定某个方法，是重写父类方法，该注解只能用于方法
+
+```java
+class Father{
+	public void fly(){
+		System.out.println("Father fly...")
+    }
+}
+class Son extends Father {
+    @Override //说明
+    public void fly(){
+        System.out.println("Son fly....");
+    }
+}
+//关于@interface:
+//@interface不是interface，是注解类，是jdk5.0之后加入的
+
+
+//使用说明
+//@Override表示指定重写父类的方法 (从编译层面验证)，如果父类没有fly方法，则会报错
+//如果不写@Override注解, 而父类仍有 public void fly(){}，仍然构成重写
+//@Override只能修饰方法，不能修饰其它类，包，属性等等
+//查看@Override注解源码为@Target(ElementType.METHOD),说明只能修饰方法
+//@Target是修饰注解的注解,称为元注解,记住这个概念
+
+
+```
+
+@Deprecated：用于表示某个程序元素(类，方法等)已过时
+
+```
+1.用于表示某个程序元素(类,方法等)已过时
+2.可以修饰方法，类，字段,包,参数 等等
+3.@Target(value={CONSTRUCTOR,FIELD,LOCAL_VARIABLE, METHOD,PACKAGE,PARAMETER,TYPE)}
+4.@Deprecated 的作用可以做到新旧版本的兼容和过渡
+```
+
+@SuppressWarnings：抑制编译器警告
+
+```
+说明各种值
+1)unchecked是忽略没有检查的警告
+2)rawtypes是忽略没有指定泛型的警告(传参时没有指定泛型的警告错误)
+3)unused是忽略没有使用某个变量的警告错误
+4)SuppressWarnings可以修饰的程序元素为, 查看@Target
+5)生成@SupperssWarnings时，不用背，直接点击左侧的黄色提示，就可以选择(注意可以指定生成的位置)
+
+```
+
+11.15 JDK的元Annotation
+
+（元注解，了解即可，能够再看源码的时候知道他是干什么的）
+
+JDK 的元 Annotation 用于修饰其他 Annotation
+
+种类：
+
+- Retention //指定注解的作用范围，三种：SOURCE,CLASS,RUNTIME
+  - 只能用于修饰一个Annotation定义，用于指定该 Annotation 可以保留多长间，@Rentention包含一个RetentionPolicy类型的成员变量，使用@Rentention时必须为该 value成员变量指定值。
+  - RetentionPolicy.SOURCE：编译器使用后，直接丢弃这种策略的注
+  - RetentionPolicy.CLASS：编译器将把注解记录在class文件中，当运行Java程序时，JVM不会保留注解。这是默认值。
+  - RetentionPolicy.RUNTIME：编译器将把注解记录在class文件中，当运行Java程序时JVM会保留注解。程序可以通过反射获取该注解。
+- Target // 指定注解可以在哪些地方使用
+  - 用于修饰Annotation定义，用于指定被修饰的Annotation能用于修饰哪些程序元素。@Target也包含一个名为value的成员变量。
+- Documented //指定该注解是否会在javadoc体现
+  - 用于指定被该元Annotation修饰的Annotation类将被javadoc工具提取成文档，即在生成文档时，可以看到该注解。
+  - 定义为Documented的注解必须设置Retention值为RUNTIME
+- Inherited //子类会继承父类注解
+  - 被它修饰的Annotation将具有继承性。如果某个类使用了被@Inherited修饰的Annotation，则其子类将自动具有该注解。
 
 #### 第12章 异常-EXCEPTION
 
+**基本概念**
+
+Java语言中，将程序执行中发生的不正常情况称为“异常”。(开发过程中的语法错误和逻辑错误不是异常)
+
+执行过程中所发生的异常事件可分为两大类:
+1）Error(错误)：Java虚拟机无法解决的严重问题。如:JVM系统内部错误资源耗尽等严重情况。比如：StackOverflowError[栈溢出]和OOM(out of memory)，Error是严重错误，程序会崩溃。
+2）Exception：其它因编程错误或偶然的外在因素导致的一般性问题，可以使用针对性的代码进行处理。例如空指针访问，试图读取不存在的文件，网络连接中断等等，Exception分为两大类：**运行时异常**[程序运行时，发生的异常]和**编译时异常**[编程时，编译器检查出的异常]。
+
+##### 异常体系图
+
+![异常体系图](./javatests/pics/异常体系图.png)
+
+1. 异常分为两大类，运行时异常和编译时异常。
+2. 运行时异常，编译器检查不出来。一般是指编程时的逻辑错误，是程序员应该避免其出现的异常。java.lang.RuntimeException类及它的子类都是运行时异常
+3. 对于运行时异常，可以不作处理，因为这类异常很普遍，若全处理可能会对程序的可读性和运行效率产生影响
+4. 编译时异常，是编译器要求必须处置的异常
+
+##### 运行时异常
+
+**常见的运行时异常：**
+
+- NullPointerException空指针异常
+  - 当应用程序试图在需要对象的地方使用null时，抛出该异常
+- ArithmeticException数学运算异常
+  - 当出现异常的运算条件时，抛出此异常。例如，一个整数“除以零”时。
+- ArrayIndexOutOfBoundsException数组下标越界异常
+  - 用非法索引访问数组时抛出的异常。如果索引为负或大于等于数组大小，则该索引为非法索引
+- ClassCastException类型转换异常
+  - 当试图将对象强制转换为不是实例的子类时，抛出该异常。
+- NumberFormatException数字格式不正确异常
+  - 当应用程序试图将字符串转换成一种数值类型，但该字符串不能转换为适当格式时，抛出该异常，使用该异常我们可以确保输入是满足条件数字。
+
+##### 编译异常
+
+编译异常是指在编译期间，就必须处理的异常，否则代码不能通过编译。
+
+**常见的编译异常：**
+
+- SQLException //操作数据库时，查询表可能发生异常
+- IOException //操作文件时，发生的异常
+- FileNotFoundException //当操作一个不存在的文件时，发生异常
+- ClassNotFoundException //加载类，而该类不存在时，异常
+- EOFException // 操作文件，到文件未尾，发生异常
+- lllegalArguementException //参数异常
+
+##### 异常处理
+
+1. try-catch-finally
+   程序员在代码中捕获发生的异常，自行处理
+   ![try-catch-finally示意图](./javatests/pics/try-catch-finally示意图.png)
+2. throws
+   将发生的异常抛出，交给调用者(方法)来处理，最顶级的处理者就是JVM
+   ![throws示意图](./javatests/pics/throws示意图.png)
+
+
+
+##### try-catch异常处理
+
+```java
+//Java提供try和catch块来处理异常。
+//try块用于包含可能出错的代码。
+//catch块用于处理try块中发生的异常。可以根据需要在程序中有多个try...catch块。
+//基本语法:
+
+try{
+	//可疑代码
+    //将异常生成对应的异常对象，传递给catch块
+}catch(异常){
+    //对异常的处理
+}
+//如果没有finally,语法是可以通过
+
+```
+
+注意事项：
+
+- 如果异常发生了，则异常发生后面的代码不会执行，直接进入到catch块。
+- 如果异常没有发生，则顺序执行try的代码块，不会进入到catch。
+- 如果希望不管是否发生异常，都执行某段代码（比如关闭连接，释放资源等）则使用如下代码-finally{}
+- 可以有多个catch语句，捕获不同的异常(进行不同的业务处理)，要求父类异常在后，子类异常在前，比如(Exception在后，NullPointerException在前)，如果发生异常，只会匹配一个catch。
+- 可以进行try-finally配合使用，这种用法相当于没有捕获异常，因此程序会直接崩掉/退出。应用场景，就是执行一段代码，不管是否发生异常，都必须执行某个业务逻辑。
+
+
+
+try-catch-finally执行顺序小结:
+
+1. 如果没有出现异常，则执行try块中所有语句，不执行catch块中语句，如果有finally，最后还需要执行finally里面的语句
+2. 如果出现异常，则try块中异常发生后，try块剩下的语句不再执行。将执行catch块中的语句，如果有finally，最后还需要执行finally里面的语句
+
+##### throws异常处理
+
+基本介绍：
+
+- 如果一个方法(中的语句执行时)可能生成某种异常，但是并不能确定如何处理这种异常，则此方法应显示地声明抛出异常，表明该方法将不对这些异常进行处理，而由该方法的**调用者负责处理**。
+- 在方法声明中用throws语句可以声明抛出异常的列表，throws后面的异常类型可以是方法中产生的异常类型，也可以是它的父类。
+
+注意：
+
+1. 对于编译异常，程序中必须处理，比如 try-catch 或者 throws
+2. 对于运行时异常，程序中如果没有处理，默认就是throws的方式处理
+3. 子类重写父类的方法时，对抛出异常的规定：子类重写的方法，所抛出的异常类型要么和父类抛出的异常一致，要么为父类抛出的异常的类型的子类型
+4. 在throws 过程中，如果有方法 try-catch，就相当于处理异常，就可以不必throws
+
+##### 自定义异常
+
+当程序中出现了某些“错误”，但该错误信息并没有在Throwable子类中描述处理，这个时候可以自己设计异常类，用于描述该错误信息。
+
+步骤:
+
+1. 定义类：自定义异常类名(程序员自己写) 继承Exception或RuntimeException
+2. 如果继承Exception，属于编译异常
+3. 如果继承RuntimeException，属于运行异常(一般来说，继承RuntimeException)
+
+
+
+throw和throws的区别：
+
+![throw和throws的区别表](./javatests/pics/throw和throws的区别表.png)
+
+
+
+
+
 #### 第13章 常用类
+
+##### 包装类
+
+**分类**
+
+针对八种基本数据类型相应的引用类型——包装类
+
+有了类的特点，就可以调用类中的方法
+
+![包装类的分类](./javatests/pics/包装类的分类.png)
+
+**包装类和基本数据的转换**
+
+这里以int和Integer演示
+
+1. jdk5前的手动装箱和拆箱方式，**装箱**：基本类型->包装类型，反之，拆箱
+2. jdk5以后(含idk5)的自动装箱和拆箱方式
+3. 自动装箱底层调用的是valueOf方法，比如Integer.valueOf()
+4. 其它包装类的用法类似，不一一举例
+
+
+
+##### String类
+
+String对象用于保存字符串，也就是一组字符序列
+
+字符串常量对象是用双引号括起的字符序列。例如:“你好”、”12.97”、”boy”等
+
+字符串的字符使用Unicode字符编码，一个字符(不区分字母还是汉字)占两个字节
+
+String类较常用构造器(其它看手册)：
+
+String s1 = new String();
+String s2 = new String(String original);
+
+String s3 = new String(char[] a);
+
+String s4 = new String(char[] a,int startlndex,int count)
+
+说明图：
+
+![string类说明](./javatests/pics/string类说明.png)
+
+创建String对象的两种方式：
+
+- 直接赋值 String s ="cccccyq";
+- 调用构造器 String s =new String("cccccyq");
+
+区别：
+
+方式一: 先从常量池查看是否有”cccccyq”数据空间，如果有，直接指向；如果没有则重新创建，然后指向。s最终指向的是常重池的空间地址
+
+方式二: 先在堆中创建空间，里面维护了value属性，指向常量池的cccccyq空间如果常量池没有”cccccyq”，重新创建，如果有，直接通过value指向。最终指向的是堆中的空间地址。
+
+两种方式的内存分布图：
+
+![两种创建String方式的内存分布图](./javatests/pics/两种创建String方式的内存分布图.png)
+
+**字符串的特性**
+
+1. String是一个final类，代表不可变的字符序列。
+2. 字符串是不可变的。一个字符串对象一旦被分配，其内容是不可变的。
+
+String类是保存字符串常量的。每次更新都需要重新开辟空间，效率较低，因此java设计者还提供了StringBuilder 和 StringBuffer 来增强String的功能并提高效率。
+
+##### String类常见方法
+
+- equals // 区分大小写，判断内容是否相等
+- equalslgnoreCase //忽略大小写的判断内容是否相等
+- length // 获取字符的个数，字符串的长度
+- indexof //获取字符在字符串中第1次出现的索引,索引从0开始,如果找不到,返回-1
+- lastIndexof//获取字符在字符串中最后1次出现的索引,索引从0开始,如找不到,返回-1
+- substring //截取指定范围的子串trim //去前后空格
+- charAt：获取某索引处的字符,注意不能使用Str[index] 这种方式
+
+
+
+- toUpperCase
+- toLowerCase
+- concat
+- replace 替换字符串中的字符
+- split分割字符串，对于某些分割字符，我们需要转义比如]等案例：String poem =“锄禾日当午,汗滴禾下土,谁知盘中餐,粒粒皆辛苦”；和文件路径.
+- compareTo //比较两个字符串的大小
+- toCharArray //转换成字符数组
+- format //格式字符串,%s 字符串 %c 字符 %d 整型 %.2f 浮点型
+
+
+
+##### StringBuffer类
+
+- java.lang.StringBuffer代表可变的字符序列，可以对字符串内容进行增删。
+- 很多方法与String相同，但StringBuffer是可变长度的。
+- StringBuffer是一个容器
+
+
+
+String与StringBuffer相比：
+
+- String保存的是字符串常量，里面的值不能更改，每次String类的更新实防上就是更改地址，效率较低 //private final char value[];
+- StringBuffer保存的是字符串变量，里面的值可以更改，每次StringBuffer的更新实际上可以更新内容，不用每次更新地址，效率较高//char[] value; // 这个放在堆
+
+
+
+##### StringBuilder类
+
+- 一个可变的字符序列。此类提供一个与StringBuffer兼容的API，但不保证同步(StringBuilder不是线程安全)。该类被设计用作StringBuffer的一个简易替换，用在字符串缓冲区被单个线程使用的时候。如果可能，建议优先采用该类因为在大多数实现中，它比StringBuffer要快。
+- 在StringBuilder上的主要操作是 append 和 insert 方法，可重载这些方法以接受任意类型的数据。
+
+常用方法与Buffer一样
+
+
+
+##### String、StringBuffer和StringBuilder比较：
+
+1. StringBuilder和StringBuffer非常类似，均代表可变的字符序列，而且方法也一样
+2. String：不可变字符序列，效率低，但是复用率高
+3. StringBuffer：可变字符序列、效率较高(增删)、线程安全,看源码
+4. StringBuilder：可变字符序列、效率最高、线程不安全
+5. String使用注意说明：
+   string s="a";//创建了一个字符串
+   s += "b";//实际上原来的”a"字符串对象已经丢弃了，现在又产生了一个字符串s+"b”(也就是”ab”)。如果多次执行这些改变串内容的操作，会导致大量副本字符串对象存留在内存中，降低效率。如果这样的操作放到循环中，会极大影响程序的性能 =>**结论**: 如果我们对String 做大量修改,不要使用String
+
+##### 三者的效率
+
+StringBuilder > StringBuffer > String
+
+##### 三者的选择
+
+1. 如果字符串存在大量的修改操作，一般使用 StringBuffer 或StringBuilder
+2. 如果字符串存在大量的修改操作，并在单线程的情况,使用 StringBuilder
+3. 如果字符串存在大量的修改操作，并在多线程的情况,使用 StringBuffer
+4. 如果我们字符串很少修改，被多个对象引用，使用String,比如配置信息等
+
+##### Math类
+
+Math 类包含用于执行基本数学运算的方法，如初等指数、对数、平方根和三角函数
+
+##### Arrays类
+
+Arrays里面包含了一系列静态方法，用于管理或操作数组(比如排序和搜索)
+
+1. toString返回数组的字符串形式
+   Arrays.toString(arr)
+2. sort排序(自然排序和定制排序)
+   Integer arr[] = (1, -1, 7, 0, 89};
+3. binarySearch通过二分搜索法进行查找，要求必须排好序
+   int index = Arrays.binarySearch(arr, 3);
+4. copyOf数组元素的复制
+   Integer[] newArr = Arrays.copyOf(arr,arr.length);
+5. fill数组元素的填充
+   Integer[] num = new Integer[]{9,3,2};
+   Arrays.fill(num,99);
+6. equals比较两个数组元素内容是否完全一致
+   boolean equals = Arrays.equals(arr, arr2);
+7. asList将一组值，转换成list
+   List<Integer>asList = Arrays.asList(2,3,4,5,6,1);
+
+
+
+##### System类
+
+常见方法
+
+1. exit退出当前程序
+2. arraycopy：复制数组元素，比较适合底层调用，一般使用Arrays.copyOf完成复制数组
+   int[] src={1,2,3};
+   int[] dest = new int[3];
+   System.arraycopy(src,0,dest,0,3);
+3. currentTimeMillens：返回当前时间距离1970-1-1的毫秒数
+4. gc：运行垃圾回收机制System.gc();
+
+
+
+##### BigInterger & BigDecimal 类
+
+- BigInteger适合保存比较大的整型
+- BigDecimal适合保存精度更高的浮点型(小数)
+
+进行加减乘除的时候，需要使用对应的方法，不能直接进行 + - * /
+
+- add加
+- subtract减
+- multiply乘
+- divide除
+
+##### 日期类
+
+**第一代：**
+
+- Date: 精确到毫秒，代表特定的瞬间
+- SimpleDateFormat： 格式和解析日期的类SimpleDateFormat格式化和解析日期的具体类。它允许进行格式化(日期 -> 文本)、解析 (文本 -> 日期)和规范化。
+
+**第二代：**
+
+第二代日期类，主要就是 Calendar类(日历)。
+public abstract class Calendar extends Object implements Serializable，cloneable,，Comparable<Calendar>
+
+Calendar 类是一个抽象类，它为特定瞬间与一组诸如 YEAR、MONTH、DAY_OF_MONTH、HOUR等**日历字段**之间的转换提供了一些方法，并为操作日历字段(例如获得下星期的日期)提供了一些方法。
+
+
+
+**前面两代日期类的不足分析**
+JDK 1.0中包含了一个java.util.Date类，但是它的大多数方法已经在JDK 1.1引Calendar类之后被弃用了。而Calendar也存在问题是:
+
+1. 可变性: 像日期和时间这样的类应该是不可变的。
+2. 偏移性: Date中的年份是从1900开始的，而月份都从0开始
+3. 格式化: 格式化只对Date有用，Calendar则不行
+4. 此外，它们也不是线程安全的;不能处理秒等 (每隔2天，多出1s)
+
+
+
+**第三代**：
+
+LocalDate(日期/年月日)、LocalTime(时间/时分秒)、LocalDateTime(日期时间/年月日时分秒)
+
+JDK8加入
+
+LocalDate只包含日期，可以获取日期字段
+LocalTime只包含时间，可以获取时间字段LocalDateTime包含日期+时间，可以获取日期和时间字段
+
+
+
+**DateTimeFormatter格式日期类**
+
+DateTimeFormat dtf = DateTimeFormatter.ofPattern(格式);
+
+String str = dtf.format(日期对象);
+
+格式参数参考jdk8文档。
+
+
+
+**Instant时间戳**
+
+类似于Date
+
+提供了一系列和Date类转换的方式
+
+Instant->Date:
+Date date = Date.from(instant);
+
+Date->Instant:
+Instant instant = date.tolnstant();
+
+
+
+**第三代日期类更多方法**
+
+- LocalDateTime类
+- MonthDay类:检查重复事件
+- 是否是闺年
+- 增加日期的某个部分
+- 使用plus方法测试增加时间的某个部分
+- 使用minus方法测试查看一年前和一年后的日期
+- ......其他各种方法在使用的时候自行查看API使用即可
+
+
+
+
 
 #### 第14章 集合
 
+数组：
+
+1. 长度开始时必须指定，而且一旦指定，不能更改
+2. 保存的必须为同一类型的元素
+3. 使用数组进行增加/删除元素的示意代码 - 比较麻烦
+
+集合：
+
+1. 可以动态保存任意多个对象，使用比较方便
+2. 提供了一系列方便的操作对象的方法：add、remove、set、get等
+3. 使用集合添加，删除新元素的示意代码，简洁了
+
+##### **集合的框架体系**
+
+主要分为两大类，如图（背下来）
+
+![集合的框架体系](./javatests/pics/集合的框架体系.png)
+
+##### Collection接口
+
+特点：
+
+1. collection实现子类可以存放多个元素，每个元素可以是Object
+2. 有些Collection的实现类，可以存放重复的元素，有些不可以
+3. 有些Collection的实现类，有些是有序的(List)，有些不是有序(Set)
+4. Collection接口没有直接的实现子类，是通过它的子接口Set 和 List 来实现的
+
+遍历元素方式——1-使用Iterator（迭代器）
+
+1. lterator对象称为迭代器，主要用于遍历 Collection 集合中的元素
+2. 所有实现了Collection接口的集合类都有一个iterator0方法，用以返回一个实现了Iterator接口的对象, 即可以返回一个选代器
+3. lterator 的结构
+4. lterator 仅用于遍历集合，lterator 本身并不存放对象
+
+![迭代器的执行原理](./javatests/pics/迭代器的执行原理.png)
+
+![Iterator接口的方法](./javatests/pics/Iterator接口的方法.png)
+
+遍历对象方式——2-for循环增强
+
+增强for循环，可以代替iterator迭代器，
+
+特点: 增强for就是简化版的iterator，本质一样。只能用于遍历集合或数组。
+
+```java
+//基本语法：
+for(元素类型 元素名:集合名或数组名){
+	访问元素
+}
+```
+
+
+
+##### List接口
+
+List 接口是 Collection 接口的子接口
+
+1. List集合类中元素有序(即添加顺序和取出顺序一致)、且可重复
+2. List集合中的每个元素都有其对应的顺序索引，即支持索引
+3. List容器中的元素都对应一个整数型的序号记载其在容器中的位置，可以根据序号存取容器中的元素
+4. JDK API 中List接口的实现类常用的有：ArrayList、LinkedList和Vertoc。
+
+三种遍历方式ArrayList、LinkedList和Vertoc
+
+```java
+//方式一: 使用iterator
+lterator iter = col.iterator();
+while(iter.hasNext()){
+	Object o = iter.next();
+}
+//方式二:使用增强for
+for(Object o:col){
+}
+//方式三: 使用普通for
+for(int i=0; i<listsize(); i++){
+    Object object = list.get(i);
+    System.out.println(object);
+}
+//说明:使用LinkedList完成使用方式和ArrayList一样
+
+```
+
+##### ArrayList底层结构和源码分析
+
+注意事项
+
+1. permits all elements，including null，ArrayList可以加入null，并且多个
+2. ArrayList是由数组来实现数据存储的
+3. ArrayList基本等同于Vector，除了 ArrayList是线程不安全(执行效率高)
+   在多线程情况下，不建议使用ArrayList
+
+底层操作机制源码分析（重点&难点）
+
+- ArrayList中维护了一个Object类型的数组elementData.
+  **transient** Object[] elementData; //**transient 表示瞬间,短暂的,表示该属性不会被序列号**
+- 当创建ArrayList对象时，如果使用的是无参构造器，则初始elementData容量为0，第次添加，则扩容elementData为10，如需要再次扩容，则扩容elementData为1.5倍。
+- 如果使用的是指定大小的构造器，则初始elementData容量为指定大小，如果需要扩容则直接扩容elementData为1.5倍。
+
+##### Vector底层结构和源码剖析
+
+1. Vector类的定义说明
+
+   ```java
+   public class Vector<E>
+   extends AbstractList<E>
+   implements List<E>, RandomAccess, Cloneable, Serializable
+   ```
+
+2. Vector底层也是一个对象数组
+   protected Object[] elementData；
+
+3. Vector是线程同步的，即线程安全，Vector类的操作方法带有**synchronized**
+
+   ```java
+   public synchronized E get(int index){
+       if (index >= elementCount)
+           throw new ArraylndexOutOfBoundsException(index);
+       return elementData(index);
+   }
+   ```
+
+   
+
+4. 在开发中，需要线程同步安全时，考虑使用Vector
+
+
+
+**Vector和ArrayList比较**
+
+![Vector与ArrayList比较图](./javatests/pics/Vector与ArrayList比较图.png)
+
+
+
+##### LinkedList底层结构
+
+全面说明：
+
+1. LinkedList底层实现了双向**链表**和双端**队列**特点
+2. 可以添加任意元素(元素可以重复)，包括null
+3. 线程不安全，没有实现同步
+
+底层操作机制：
+
+1. LinkedList底层维护了一个双向链表
+2. LinkedList中维护了两个属性first和last分别指向首节点和尾节点
+3. 每个节点(Node对象)，里面又维护了prev、next、item三个属性，其中通过prev指向前一个，通过next指向后一个节点。最终实现双向链表。
+4. 所以LinkedList的元素的**添加和删除**，不是通过数组完成的，相对来说效率较高
+5. 模拟一个**简单**的双向链表
+
+
+
+**ArrayList和LinkedList比较**
+
+![ArrayList和LinkedList比较图](./javatests/pics/ArrayList和LinkedList比较图.png)
+
+
+
+##### Set接口和常用方法
+
+**set接口**
+
+1. 无序(添加和取出的顺序不一致) ，没有索引
+2. 不允许重复元素，所以最多包含一个null
+3. JDK API中Set接口的实现类有（AbstractSet, ConcurrentSkipListSet, CopyOnWriteArraySet, EnumSet, **HashSet**, JobStateReasons, LinkedHashSet, **TreeSet** ）
+
+**常用方法**
+
+和 List 接口一样，Set 接口也是 Collection 的子接口，因此，常用方法和 Collection 接口一样。
+
+**遍历方式**
+
+同Collection的遍历方式一样，因为Set接口是Collection接口的子接口。
+
+1. 可以使用迭代器
+2. 增强for
+3. **不能使用**索引的方式来获取
+
+##### Set接口实现类-HashSet
+
+1. HashSet实现了Set接口
+
+2. HashSet实际上是HashMap
+
+   ```java
+   public HashSet(){
+   	map = new HashMap<>();
+   }
+   ```
+
+3. 可以存放null值，但是只能有一个null
+
+4. HashSet不保证元素是有序的，取决于hash后，再确定索引的结果。(即，不保证存放元素的顺序和取出顺序一致)
+
+5. 不能有重复元素/对象。
+
+**HashSet底层机制说明**
+
+HashSetdic底层是HashMap，HashMap底层是(数组+链表+红黑树)
+
+**添加元素底层实现**
+
+- HashSet 底层是 HashMap
+- 添加一个元素时，先得到hash值，会转成索引值
+- 找到存储数据表table，看这个索引位置是否已经存放的有元素
+- 如果没有， 直接加入
+- 如果有，调用 equals 比较，如果相同，就放弃添加，如果不相同，则添加到最后
+- 在Java8中,如果一条链表的元素个数到达 TREEIFY_THRESHOLD(默认是 8)，并且table的大小 >=MIN_TREEIFY_CAPACITY(默认64)就会进行树化(红黑树)
+
+HashSet的**扩容和转成红黑树机制**
+
+- HashSet底层是HashMap，第一次添加时，table 数组扩容到 16，临界值(threshold)是16 * 加载因子(loadFactor)是0.75 = 12
+- 如果table数组使用到了临界值 12，就会扩容到 16 * 2 = 32，新的临界值就是32 * 0.75 = 24，依次类推
+- 在Java8中，如果一条链表的元素个数到达 TREEIFY_THRESHOLD(默认是8),并且table的大小 >= MIN_TREEIFY_ CAPACITY(默认64),就会进行树化(红黑树)，**否则仍然采用数组扩容机制**
+
+
+
+Map接口和常用方法
+
+特点（这里讲的是JDK8的Map接口特点）：
+
+1. Map与Collection并列存在。用于保存具有映射关系的数据：Key-Value
+2. Map中的key和value可以是任何引用类型的数据，会封装到HashMap$Node对象中
+3. Map中的key不允许重复，**原因和HashSet 一样**
+4. Map中的value可以重复
+5. Map的key可以为null，value也可以为null，注意 key 为null，只能有一个，value为null，可以多个
+6. 常用String类作为Map的key
+7. key和value之间存在单向一对一关系，即通过指定的key总能找到对应的value。
+8. Map存放数据的key-value示意图，一对k-v是放在一个HashMap$Node中的，有因为Node实现了Entry接口，有些书上也说一对k-v就是一个Entry。
+
+![Map存放数据的key-value示意图](./javatests/pics/Map存放数据的key-value示意图.png)
+
+
+
+**Map接口遍历方法**
+
+1. containsKey：查找键是否存在
+2. keySet：获取所有的键
+3. entrySet：获取所有关系k-v
+4. values：获取所有的值
+
+
+
+##### Map接口实现类-HashMap
+
+**HashMap**
+
+- Map接口的常用实现类: HashMap、Hashtable和Properties。
+- HashMap是 Map 接口使用频率最高的实现类。
+- HashMap 是以 key-val 对的方式来存储数据(HashMap$Node类型)
+- key不能重复，但是值可以重复，允许使用null键和null值
+- 如果添加相同的key，则会覆盖原来的key-val，等同于修改。(key不会替换，val会替换）
+- 与HashSet一样，不保证映射的顺序，因为底层是以hash表的方式来存储的。(idk8的hashMap底层 数组+链表+红黑树)
+- HashMap没有实现同步，因此是线程不安全的，方法没有做同步互斥的操作，没有synchronized
+
+**底层机制和源码剖析**
+
+- HashMap底层维护了Node类型的数组table，默认为null
+- 当创建对象时，将加载因子(loadfactor)初始化为0.75
+- 当添加key-val时，通过**key**的哈希值得到在table的索引。然后判断该索引处是否有元素如果没有元素直接添加。如果该索引处有元素，继续判断该元素的key和准备加入的key相是否等，如果相等，则直接替换val; 如果不相等需要判断是树结构还是链表结构，做出相应处理。如果添加时发现容量不够，则需要扩容。
+- 第1次添加，则需要扩容table容量为16，临界值(threshold)为12 (16*0.75)
+- 以后再扩容，则需要扩容table容量为原来的2倍(32)，临界值为原来的2倍，即24，依次类推
+- 在Java8中,如果一条链表的元素个数超过 TREEIFY_THRESHOLD(默认是 8)，并且table的大小 >= MIN_TREEIFY_CAPACITY(默认64)，就会进行树化(红黑树)
+
+
+
+##### Map接口实现类-Hashtable
+
+**HashTable**
+
+1. 存放的元素是键值对: 即 K-V
+2. hashtable的键和值都不能为null，否则会抛出NullPointerException
+3. hashTable 使用方法基本上和HashMap一样
+4. hashTable是线程安全的(synchronized)，hashMap 是线程不安全的
+5. 简单看下底层结构
+
+**Hashtable和HashMap对比**
+
+![Hashtable和HashMap对比图](./javatests/pics/Hashtable和HashMap对比图.png)
+
+
+
+Map接口实现类-Properties
+
+1. Properties类继承自Hashtable类并且实现了Map接口，也是使用一种键值对的形式来保存数据。
+2. 他的使用特点和Hashtable类似
+3. Properties 还可以用于 从 xxxproperties 文件中，加载数据到Properties类对象并进行读取和修改
+4. 说明: 工作后 xxx.properties 文件通常作为配置文件
+
+##### 总结-开发中如何选择集合实现类（记住）
+
+在开发中，选择什么集合实现类，主要取决于**业务操作特点**，然后根据集合实现类特性进行选择，分析如下:
+
+1. 先判断存储的类型(一组对象[单列]或一组键值对[双列])
+   1. 一组对象[单列]：Collection接口
+      		允许重复：List
+      				增删多：LinkedList[底层维护了一个双向链表]
+      				改查多: ArrayList [底层维护 Object类型的可变数组]
+      		不允许重复：Set
+      				无序：HashSet [底层是HashMap ，维护了一个哈希表 即(数组+链表+红黑树)]
+      				排序: TreeSet
+      				插入和取出顺序一致: LinkedHashSet，维护数组+双向链表
+2. 一组键值对[双列]: Map
+   		键无序: HashMap [底层是: 哈希表 jdk7: 数组+链表，jdk8: 数组+链表+红黑树]
+   		键排序: TreeMap
+   		键插入和取出顺序一致: LinkedHashMap
+   		读取文件 Properties
+
+##### Collections工具类
+
+1. Collections 是个操作 Set、List 和 Map 等集合的工具类
+2. Collections 中提供了一系列静态的方法对集合元素进行排序、查询和修改等操作
+
+**排序操作**（均为static方法）
+
+1. reverse(List): 反转 List 中元素的顺序
+2. shuffle(List):对 List 集合元素进行随机排序
+3. sort(List): 根据元素的自然顺序对指定 List 集合元素按升序排序
+4. sort(List，Comparator): 根据指定的 Comparator 产生的顺序对 List 集合元素进行排序
+5. swap(List，int，int): 将指定 list 集合中的i 处元素和j处元素进行交换
+
+**查找、替换**
+
+1. Object max(Collection): 根据元素的自然顺序，返回给定集合中的最大元素
+2. Object max(Collection,Comparator): 根据 Comparator 指定的顺序返回给定集合中的最大元素
+3. Object min(Collection)
+4. Object min(Collection, Comparator)
+5. int frequency(Collection，Object): 返回指定集合中指定元素的出现次数
+6. void copy(List dest,List src): 将src中的内容复制到dest中
+7. boolean replaceAll(List list，Object oldVal，bject newVal): 使用新值替换 List 对象的所有旧值
+
+
+
 #### 第15章 泛型
+
+##### 泛型的理解和好处
+
+**泛型解决的问题**
+
+1. 不能对加入到集合ArrayList中的数据类型进行约束(不安全)
+2. 遍历的时候，需要进行类型转换，如果集合中的数据量较大，对效率有影响
+
+**好处**
+
+1. 编译时，检查添加元素的类型，提高了安全性
+
+2. 减少了类型转换的次数，提高效率
+
+   ```
+   不使用泛型:Dog -加入-> Object - 取出 -> Dog 
+   	放入到ArrayList会先转成Object,在取出时,还需要转换成Dog
+   
+   使用泛型:Dog -> Dog -> Dog
+   	放入时,和取出时,不需要类型转换,提高效率
+   ```
+
+3. 不再提示编译警告
+
+##### **泛型介绍**
+
+int a = 10；
+泛(广泛)型(类型) => Integer，String，Dog
+
+1. 泛型又称参数化类型，是Jdk5.0出现的新特性，解决数据类型的安全性问题
+2. 在类声明或实例化时只要指定好需要的具体的类型即可。
+3. Java泛型可以保证如果程序在编译时没有发出警告，运行时就不会产生ClassCastException异常。同时，代码更加简洁、健壮
+4. 泛型的作用是:可以在类声明时通过一个标识表示类中某个属性的类型或者是某法的返回值的类型，或者是参数类型。
+
+##### **语法**
+
+- 声明
+
+  ```java
+  interface 接口 <T>{}
+  class 类<K,V>{}
+  //比如：List,ArrayList
+  /*
+  说明：
+  1)其中T,K,V不代表值，而是表示类型
+  2)任意字母都可以。常用T表示,是Type的缩写
+  */
+  
+  ```
+
+- 实例化
+
+  ```java
+  //要在类名后面指定类型参数的值（类型）。如：
+  List<String> strList = new ArrayList<String>();
+  
+  Lterator<Customer> iterator = customers.iterator();
+  ```
+
+
+
+**注意事项和细节**
+
+- interface List<T>{}，public class HashSet<E>{}..等等
+  说明：T，E只能是引用类型
+- 在给泛型指定具体类型后，可以传入该类型或者其子类类型
+- 泛型使用形式
+  List<Integer> list1 = new ArrayList<Integer>();
+  List<Integer> list2 = new ArrayList<>();
+- 如果我们这样写 List list3 = new ArrayList0; 默认给它的泛型是[<E> E就是 Object]
+
+##### **自定义泛型**
+
+###### **自定义泛型类**
+
+基本语法
+
+```java
+class 类名<T,R...>{//...表示可以有多个泛型
+	成员
+}
+```
+
+注意：
+
+1. 普通成员可以使用泛型(属性、方法)
+2. 使用泛型的数组，不能初始化
+3. 静态方法中不能使用类的泛型
+4. 泛型类的类型，是在创建对象时确定的(因为创建对象时需要指定确定类型)
+5. 如果在创建对象时，没有指定类型，默认为Object
+
+###### **自定义泛型接口**
+
+```java
+interface 接口名<T,R...>{
+}
+```
+
+注意：
+
+接口中，静态成员也不能使用泛型(这个和泛型类规定一样)
+
+泛型接口的类型在**继承接口**或者**实现接口**时确定
+
+没有指定类型，默认为object
+
+###### **自定义泛型方法**
+
+基本语法
+
+```java
+修饰符 <T,R..>返回类型 方法名(参数列表){
+}
+```
+
+注意：
+
+1. 泛型方法，可以定义在普通类中，也可以定义在泛型类中
+2. 当泛型方法被调用时，类型会确定
+3. public void eat(E e){}，修饰符后没有<T,R..> eat方法不是泛型方法，而是使用了泛型
+
+
+
+##### 泛型的继承和通配符
+
+1. 泛型不具备继承性
+2. <?>：支持任意泛型类型
+3. <?extends A>：支持A类以及A类的子类，规定了泛型的上限
+4. <? super A>：支持A类以及A类的父类，不限于直接父类，规定了泛型的下限
+
+
+
+##### JUnit
+
+**为什么需要**
+
+1. 一个类有很多功能代码需要测试，为了测试，就需要写入到main方法中
+2. 如果有多个功能代码测试，就需要来回注销，切换很麻烦
+3. 如果可以直接运行一个方法，就方便很多，并且可以给出相关信息，就好了 -> JUnit
+
+**基本介绍**
+
+JUnit是一个Java语言的单元测试框架
+
+多数Java的开发环境都已经集成了JUnit作为单元测试的工具
+
+
 
 #### 第16章 项目-坦克大战-1
 
 #### 第17章 多线程基础
 
+##### 相关概念
+
+程序
+
+- 是为完成特定任务、用某种语言编写的一组指令的集合，简单的说:就是写的代码。
+
+进程
+
+- 进程是指运行中的程序，比如我们使用QQ，就启动了一个进程，操作系统就会为该进程分配内存空间。当我们使用迅雷，又启动了一个进程，操作系统将为迅雷分配新的内存空间。
+- 进程是程序的一次执行过程，或是正在运行的一个程序。是动态过程:有它自身的产生、存在和消亡的过程
+
+线程
+
+- 线程由进程创建的，是进程的一个实体
+- 一个进程可以拥有多个线程
+
+单&多线程
+
+- 单线程：同一个时刻，只允许执行一个线程
+- 多线程：同一个时刻，可以执行多个线程，比如：一个qq进程，可以同时打开多个聊天窗口，一个迅雷进程，可以同时下载多个文件
+- 并发：同一个时刻，多个任务交替执行，造成一种“貌似同时”的错觉，简单的说单核cpu实现的多任务就是并发。
+- 并行：同一个时刻，多个任务同时执行。多核cpu可以实现并行。并发和并行，java
+
+##### 线程基本使用
+
+**创建线程的两种方式**
+
+1. 继承Thread 类，重写 run方法
+2. 实现Runnable接口，重写 run方法
+
+说明：
+
+- java是单继承的，在某些情况下一个类可能已经继承了某个父类,这时在用继承Thread类方法来创建线程显然不可能了。
+- java设计者们提供了另外一个方式创建线程，就是通过实现Runnable接口来创建线程。
+
+
+
+**继承Thread vs 实现 Runnable 的区别**
+
+- 从java的设计来看，通过继承Thread或者实现Runnable接口来创建线程本质上没有区别，从idk帮助文档我们可以看到Thread类本身就实现了Runnable接口
+- 实现Runnable接口方式更加适合多个线程共享一个资源的情况，并且避免了单继承的限制，建议使用Runnable
+
+##### 线程终止
+
+1. 当线程完成任务后，会自动退出
+2. 还可以通过**使用变量**来控制run方法退出的方式停止线程，即**通知方式**
+
+##### 线程常用方法
+
+1. setName //设置线程名称，使之与参数 name 相同
+2. getName //返回该线程的名称
+3. start //使该线程开始执行; Java 虚拟机底层调用该线程的 start0 方法
+4. run //调用线程对象 run 方法
+5. setPriority //更改线程的优先级
+6. getPriority //获取线程的优先级
+7. sleep//在指定的毫秒数内让当前正在执行的线程休眠 (暂停执行)
+8. interrupt //中断线程
+9. yield：线程的礼让。让出cpu，让其他线程执行，但礼让的时间不确定，所以也不一定礼让成功
+10. join：线程的插队。插队的线程一旦插队成功，则肯定先执行完插入的线程所有的任务案例: main线程创建一个子线程，每隔1s 输出 hello输出 20次,主线程每隔1秒，输出 hi，输出 20次.要求两个线程同时执行，当主线程输出 5次后，就让子线程运行完毕，主线程再继续，
+
+**注意事项和细节**
+
+- start 底层会创建新的线程，调用run，run 就是一个简单的方法调用，不会启动新线程
+- 线程优先级的范围
+- interrupt，中断线程，但并没有真正的结束线程。所以一般用于中断正在休眠线程
+- sleep:线程的静态方法，使当前线程休眠
+
+**用户线程和守护线程**
+
+1. 用户线程：也叫工作线程，当线程的任务执行完或通知方式结束
+2. 守护线程：一般是为工作线程服务的，当所有的用户线程结束，守护线程自动结束
+3. 常见的守护线程：垃圾回收机制
+
+##### 线程的生命周期
+
+JDK 中用 Thread.State 枚举表示了线程的几种状态
+
+public static enum **Thread.State** extends Enum<Thread.State>
+
+线程状态。线程可以处于下列状态之一： 
+
+- [NEW]
+  至今尚未启动的线程处于这种状态。 
+- [RUNNABLE]
+  正在  Java 虚拟机中执行的线程处于这种状态。 
+- [BLOCKED]
+  受阻塞并等待某个监视器锁的线程处于这种状态。 
+- [WAITING]
+  无限期地等待另一个线程来执行某一特定操作的线程处于这种状态。 
+- [TIMED_WAITING]
+  等待另一个线程来执行取决于指定等待时间的操作的线程处于这种状态。 
+- [TERMINATED]
+  已退出的线程处于这种状态。
+
+**线程状态转换图**
+
+![线程状态装换图](./javatests/pics/线程状态装换图.png)
+
+##### 线程的同步
+
+**机制**
+
+- 在多线程编程，一些敏感数据不允许被多个线程同时访问，此时就使用同步访问技术，保证数据在任何同一时刻，最多有一个线程访问，以保证数据的完整性。
+- 也可以这样理解：线程同步，即当有一个线程在对内存进行操作时，其他线程都不可以对这个内存地址进行操作，直到该线程完成操作，其他线程才能对该内存地址进行操作。
+
+**具体同步方法-Synchronized**
+
+1. 同步代码块
+
+   ```java
+   synchronized(对象)[ // 得到对象的锁，才能操作同步代码
+       // 需要被同步代码;
+   }    
+   ```
+
+2. synchronized还可以放在方法声明中，表示整个方法-为同步方法
+
+   ```java
+   public synchronized void m(String.name){
+   	//需要被同步的代码
+   }
+   ```
+
+
+
+##### 互斥锁
+
+1. Java语言中，引入了对象互斥锁的概念，来保证共享数据操作的完整性。
+2. 每个对象都对应于一个可称为“互斥锁”的标记，这个标记用来保证在任一时刻，只能有一个线程访问该对象。
+3. 关键字synchronized 来与对象的互斥锁联系。当某个对象用synchronized修饰时表明该对象在任一时刻只能由一个线程访问
+4. 同步的局限性:导致程序的执行效率要降低
+5. 同步方法(非静态的)的锁可以是this,也可以是其他对象(要求是同一个对象)
+6. 同步方法(静态的)的锁为当前类本身
+
+**注意事项和细节**
+
+- 同步方法如果没有使用static修饰: 默认锁对象为this
+- 如果方法使用static修饰，默认锁对象:当前类.class
+- 实现的落地步骤:
+  - 需要先分析上锁的代码
+  - 选择同步代码块或同步方法
+  - 要求多个线程的锁对象为同一个即可!
+
+##### 线程的死锁、释放锁
+
+**线程死锁**：多个线程都占用了对方的锁资源，但不肯相让，导致了死锁，在编程是一定要避免死锁的发生
+
+释放锁：
+
+- 当前线程的同步方法、同步代码块执行结束
+  案例:上厕所，完事出来
+- 当前线程在同步代码块、同步方法中遇到break、return
+  案例:没有正常的完事，经理叫他修改bug，不得已出来
+- 当前线程在同步代码块、同步方法中出现了未处理的Error或Exception，导致异常结束发现忘带纸，不得已出来
+- 案例:没有正常的完事，当前线程在同步代码块、同步方法中执行了线程对象的wait0方法，当前线程暂停，并释放锁。
+  案例: 没有正常完事，觉得需要酝酿下，所以出来等会再进去
+
+下面的操作不会释放锁：
+
+- 线程执行同步代码块或同步方法时，程序调用Thread.sleep()、Thread.yield()方法暂停当前线程的执行，不会释放锁
+  案例:上厕所，太困了，在坑位上眯了一会
+- 线程执行同步代码块时，其他线程调用了该线程的suspend()方法将该线程挂起该线程不会释放锁。
+  提示:应尽量避免使用suspend()和resume()来控制线程，方法不再推荐使用
+
+
+
+
+
 #### 第18章 项目-坦克大战-2
 
 #### 第19章 IO流
+
+##### 文件
+
+文件是保存数据的地方
+
+文件在程序中以流的形式来操作
+
+流:数据在数据源(文件)和程序(内存)之间经历的路径
+输入流: 数据从数据源(文件)到程序(内存)的路径
+输出流:数据从程序(内存)到数据源文件)的路径
+
+##### 常用文件操作
+
+创建文件对象相关构造器和方法
+
+```java
+new file(String pathname)//根据路径构建一个File对象
+new file(File parent,String child)//根据父目录文件+子路径构建
+new file(String parent,String child)//根据父目录+子路径构建
+creatNewFile //创建新文件
+```
+
+获取文件相关信息
+
+getName、getAbsolutePath、getParent、 length、exists、isFile、isDirectory
+
+目录的操作和文件删除
+
+- mkdir	创建一级目录
+- mkdirs	创建多级目录
+- delete	删除空目录或文件
+
+
+
+##### IO流原理及流的分类
+
+**原理**
+
+1. l/O是Input/Output的缩写，I/0技术是非常实用的技术，用于处理数据传输如读/写文件，网络通讯等。
+2. Java程序中，对于数据的输入/输出操作以”流(stream)” 的方式进行
+3. java.io包下提供了各种“流”类和接口，用以获取不同种类的数据，并通过方法输入或输出数据
+4. 输入input:读取外部数据(磁盘、光盘等存储设备的数据)到程序 (内存)中。
+5. 输出output: 将程序(内存)数据输出到磁盘、光盘等存储设备中
+
+**分类**
+
+- 按操作数据单位不同分为: 字节流(8 bit) 二进制文件，字符流(按字符)文本文件
+- 按数据流的流向不同分为: 输入流，输出流
+- 按流的角色的不同分为:节点流，处理流/包装流
+
+
+
+1. Java的IO流共涉及40多个类，实际上非常规则，都是从如上4个抽象基类派生的
+2. 由这四个类派生出来的子类名称都是以其父类名作为子类名后缀。
+
+##### IO流体系图-常用的类
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #### 第20章 项目-坦克大战-3
 
