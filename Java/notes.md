@@ -2694,7 +2694,7 @@ Instant instant = date.tolnstant();
 
 集合：
 
-1. 可以动态保存任意多个对象，使用比较方便
+1. 可以**动态保存**任意多个对象，使用比较方便
 2. 提供了一系列方便的操作对象的方法：add、remove、set、get等
 3. 使用集合添加，删除新元素的示意代码，简洁了
 
@@ -2706,12 +2706,51 @@ Instant instant = date.tolnstant();
 
 ##### Collection接口
 
+```java
+public class test_collection {
+    public static void main(String[] args) {
+        List list = new ArrayList();
+        //add添加元素
+        list.add("cyq");
+        list.add(66);
+        list.add(true);
+        System.out.println(list);
+        //remove删除元素
+        list.remove(0);
+        list.remove(true);
+        //contains查找元素
+        list.contains("cyq");
+        //size获取元素个数
+        list.size();
+        //isEmpty判断是否为空
+        list.isEmpty();
+        //清空clear
+        list.clear();
+        //addALL 添加多个元素
+        ArrayList list6 = new ArrayList();
+        list.addAll(list6);
+        //containsALL:查找多个元素是否都存在
+        list.containsAll(list6);
+        //removeALL:删除多个元素
+        list.removeAll(list6);
+    }
+}
+```
+
 特点：
 
 1. collection实现子类可以存放多个元素，每个元素可以是Object
 2. 有些Collection的实现类，可以存放重复的元素，有些不可以
 3. 有些Collection的实现类，有些是有序的(List)，有些不是有序(Set)
 4. Collection接口没有直接的实现子类，是通过它的子接口Set 和 List 来实现的
+
+
+
+快速生成while => itit
+
+显示所有快捷键 ctrl + j
+
+
 
 遍历元素方式——1-使用Iterator（迭代器）
 
@@ -2729,6 +2768,8 @@ Instant instant = date.tolnstant();
 增强for循环，可以代替iterator迭代器，
 
 特点: 增强for就是简化版的iterator，本质一样。只能用于遍历集合或数组。
+
+快捷方式 I（大写i）
 
 ```java
 //基本语法：
@@ -2748,6 +2789,40 @@ List 接口是 Collection 接口的子接口
 3. List容器中的元素都对应一个整数型的序号记载其在容器中的位置，可以根据序号存取容器中的元素
 4. JDK API 中List接口的实现类常用的有：ArrayList、LinkedList和Vertoc。
 
+```java
+        List list = new ArrayList();
+        list.add("张三丰");
+        list.add("贾宝玉");
+//        void add(int index, Object ele):在index位置插入ele元素
+        //在index = 1的位置插入一个对象
+        list.add(1, "韩顺平");
+        System.out.println("list=" + list);
+//        boolean addAll(int index, Collection eles):从index位置开始将eles中的所有元素添加进来
+        List list2 = new ArrayList();
+        list2.add("jack");
+        list2.add("tom");
+        list.addAll(1, list2);
+        System.out.println("list=" + list);
+//        Object get(int index):获取指定index位置的元素
+
+//        int indexOf(Object obj):返回obj在集合中首次出现的位置
+        System.out.println(list.indexOf("tom"));//2
+//        int lastIndexOf(Object obj):返回obj在当前集合中末次出现的位置
+        list.add("韩顺平");
+        System.out.println("list=" + list);
+        System.out.println(list.lastIndexOf("韩顺平"));
+//        Object remove(int index):移除指定index位置的元素，并返回此元素
+        list.remove(0);
+        System.out.println("list=" + list);
+//        Object set(int index, Object ele):设置指定index位置的元素为ele , 相当于是替换.
+        list.set(1, "玛丽");
+        System.out.println("list=" + list);
+//        List subList(int fromIndex, int toIndex):返回从fromIndex到toIndex位置的子集合
+        // 注意返回的子集合 fromIndex <= subList < toIndex
+        List returnlist = list.subList(0, 2);
+        System.out.println("returnlist=" + returnlist);
+```
+
 三种遍历方式ArrayList、LinkedList和Vertoc
 
 ```java
@@ -2765,8 +2840,9 @@ for(int i=0; i<listsize(); i++){
     System.out.println(object);
 }
 //说明:使用LinkedList完成使用方式和ArrayList一样
-
 ```
+
+
 
 ##### ArrayList底层结构和源码分析
 
