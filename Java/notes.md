@@ -2936,6 +2936,8 @@ public synchronized boolean add(E e){
 
 
 
+`跳过P515 LinkedList源码图解，约30mins`
+
 **ArrayList和LinkedList比较**
 
 ![ArrayList和LinkedList比较图](./javatests/pics/ArrayList和LinkedList比较图.png)
@@ -2976,9 +2978,24 @@ public synchronized boolean add(E e){
 
 3. 可以存放null值，但是只能有一个null
 
-4. HashSet不保证元素是有序的，取决于hash后，再确定索引的结果。(即，不保证存放元素的顺序和取出顺序一致)
+4. HashSet不保证元素是有序的，取决于hash后，再确定索引的结果。(即，不保证存放元素的顺序和取出顺序一致)----(一旦取出，这个顺序就是固定的)
 
 5. 不能有重复元素/对象。
+
+```java
+//举例
+//如果是类，可以重名：
+set.add(new Dog("Tom"));//ok
+set.add(new Dog("Tom"));//ok
+//上述可行√
+
+//但是下面情况不行：
+set.add(new String("cyq666"));//ok
+set.add(new String("cyq666"));//加入不了
+//看源码理解底层机制
+```
+
+
 
 **HashSet底层机制说明**
 
@@ -2999,13 +3016,33 @@ HashSet的**扩容和转成红黑树机制**
 - 如果table数组使用到了临界值 12，就会扩容到 16 * 2 = 32，新的临界值就是32 * 0.75 = 24，依次类推
 - 在Java8中，如果一条链表的元素个数到达 TREEIFY_THRESHOLD(默认是8),并且table的大小 >= MIN_TREEIFY_ CAPACITY(默认64),就会进行树化(红黑树)，**否则仍然采用数组扩容机制**
 
+`跳过P521-524 HashSet源码解读1-4,120+MINS   &&&    跳过P529练习题            。`
+
+
+
+##### Set接口实现类-LinkedHashSet
+
+- 是HashSet的子类
+- 底层是一个LinkedHashMap，底层维护了一个数组+双向链表
+- 根据元素的hashCode值来决定元素的存储位置，同时使用链表维护元素的**次序**（图），这使得元素看起来是以插入顺序保存的
+- 不允许添加重复元素
+
+LinkedHashSet相关说明:
+
+1. 维护了一个hash表和双向链表，有head和tail
+2. 每一个节点有pre和next属性，形成双向链表
+3. 添加一个元素的时候，先求hash值，再求索引，确定元素在hashtable的位置，然后将添加的元素加入到双向链表（已经存在就不添加，原则和hashset一样）
+4. 遍历LinkedHashSet也能确保插入顺序和遍历顺序一致
+
+`跳过P528 LinkedHashSet源码解读，大约30mins &&  P529练习`
+
 
 
 Map接口和常用方法
 
-特点（这里讲的是JDK8的Map接口特点）：
+特点（这里讲的是JDK8的Map接口特点，开发中很实用）：
 
-1. Map与Collection并列存在。用于保存具有映射关系的数据：Key-Value
+1. Map与Collection并列存在。用于保存具有映射关系的数据：Key-Value(双列元素)
 2. Map中的key和value可以是任何引用类型的数据，会封装到HashMap$Node对象中
 3. Map中的key不允许重复，**原因和HashSet 一样**
 4. Map中的value可以重复
@@ -3016,14 +3053,60 @@ Map接口和常用方法
 
 ![Map存放数据的key-value示意图](./javatests/pics/Map存放数据的key-value示意图.png)
 
+`P531 Map接口源码分析，mark一下，30mins     。。。。`
 
+
+
+
+
+```java
+//Map接口常用方法:
+put添加
+remove根据键删除映射关系
+get根据键获取值
+size获取元素个数
+isEmpty判断个数是否为0
+clear清除
+containsKey查找键是否存在
+
+```
 
 **Map接口遍历方法**
 
-1. containsKey：查找键是否存在
-2. keySet：获取所有的键
-3. entrySet：获取所有关系k-v
-4. values：获取所有的值
+key-values
+
+1. 增强for
+2. 迭代器Iterater
+
+
+
+values：获取所有的值
+
+```java
+Collection values = map.values();
+//这里可以使用所有的Collections使用的遍历方法
+//1）增强for
+//2）迭代器
+
+```
+
+entrySet：获取所有关系k-v
+
+```java
+Set entrySet = map.entrySet();
+//1)增强for
+//(将entry转成Map.Entry)：
+Map.Entry m = (Map.Entry) entry;
+//m.getKey()
+//m.getValue
+//2)迭代器
+Object entry = interator.next();
+Map.Entry m = (Map.Entry) entry;
+//m.getKey()
+//m.getValue
+```
+
+`P534 Map课堂练习 16mins    &&& P537-P538HsahMap源码解读&扩容树化触发 38mins+18mins              。`  
 
 
 
@@ -3038,6 +3121,7 @@ Map接口和常用方法
 - 如果添加相同的key，则会覆盖原来的key-val，等同于修改。(key不会替换，val会替换）
 - 与HashSet一样，不保证映射的顺序，因为底层是以hash表的方式来存储的。(idk8的hashMap底层 数组+链表+红黑树)
 - HashMap没有实现同步，因此是线程不安全的，方法没有做同步互斥的操作，没有synchronized
+- 
 
 **底层机制和源码剖析**
 
@@ -3073,13 +3157,15 @@ Map接口实现类-Properties
 3. Properties 还可以用于 从 xxxproperties 文件中，加载数据到Properties类对象并进行读取和修改
 4. 说明: 工作后 xxx.properties 文件通常作为配置文件
 
+
+
 ##### 总结-开发中如何选择集合实现类（记住）
 
 在开发中，选择什么集合实现类，主要取决于**业务操作特点**，然后根据集合实现类特性进行选择，分析如下:
 
 1. 先判断存储的类型(一组对象[单列]或一组键值对[双列])
    1. 一组对象[单列]：Collection接口
-      		允许重复：List
+       	允许重复：List
          				增删多：LinkedList[底层维护了一个双向链表]
          				改查多: ArrayList [底层维护 Object类型的可变数组]
          		不允许重复：Set
@@ -3087,10 +3173,14 @@ Map接口实现类-Properties
          				排序: TreeSet
          				插入和取出顺序一致: LinkedHashSet，维护数组+双向链表
 2. 一组键值对[双列]: Map
-   		键无序: HashMap [底层是: 哈希表 jdk7: 数组+链表，jdk8: 数组+链表+红黑树]
-      		键排序: TreeMap
+    	     键无序: HashMap [底层是: 哈希表 jdk7: 数组+链表，jdk8: 数组+链表+红黑树]
+      	   键排序: TreeMap
       		键插入和取出顺序一致: LinkedHashMap
       		读取文件 Properties
+
+`跳过了P543-P544 TreeSet&TreeMap源码解读  分别为24&23mins         。`
+
+
 
 ##### Collections工具类
 
@@ -3114,6 +3204,10 @@ Map接口实现类-Properties
 5. int frequency(Collection，Object): 返回指定集合中指定元素的出现次数
 6. void copy(List dest,List src): 将src中的内容复制到dest中
 7. boolean replaceAll(List list，Object oldVal，bject newVal): 使用新值替换 List 对象的所有旧值
+
+
+
+`作业P547-P551 集合作业   。`
 
 
 
@@ -3189,6 +3283,10 @@ int a = 10；
   List<Integer> list2 = new ArrayList<>();
 - 如果我们这样写 List list3 = new ArrayList0; 默认给它的泛型是[<E> E就是 Object]
 
+`跳过了P559 泛型课堂练习 27MINS`
+
+
+
 ##### **自定义泛型**
 
 ###### **自定义泛型类**
@@ -3218,11 +3316,12 @@ interface 接口名<T,R...>{
 
 注意：
 
-接口中，静态成员也不能使用泛型(这个和泛型类规定一样)
+1. 接口中，静态成员也不能使用泛型(这个和泛型类规定一样)
 
-泛型接口的类型在**继承接口**或者**实现接口**时确定
+2. 泛型接口的类型在**继承接口**或者**实现接口**时确定
 
-没有指定类型，默认为object
+3. 没有指定类型，默认为object(最好是把object写出来)
+
 
 ###### **自定义泛型方法**
 
@@ -3263,6 +3362,8 @@ interface 接口名<T,R...>{
 JUnit是一个Java语言的单元测试框架
 
 多数Java的开发环境都已经集成了JUnit作为单元测试的工具
+
+
 
 
 
