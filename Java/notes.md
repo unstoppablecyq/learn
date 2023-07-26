@@ -2853,12 +2853,19 @@ for(int i=0; i<listsize(); i++){
 3. ArrayList基本等同于Vector，除了 ArrayList是线程不安全(执行效率高)
    在多线程情况下，不建议使用ArrayList
 
-底层操作机制源码分析（重点&难点）
+
+
+**底层操作机制源码分析（重点&难点）**
 
 - ArrayList中维护了一个Object类型的数组elementData.
-  **transient** Object[] elementData; //**transient 表示瞬间,短暂的,表示该属性不会被序列号**
-- 当创建ArrayList对象时，如果使用的是无参构造器，则初始elementData容量为0，第次添加，则扩容elementData为10，如需要再次扩容，则扩容elementData为1.5倍。
+  **transient** Object[] elementData; 
+  //**transient 表示瞬间,短暂的,表示该属性不会被序列号**
+- 当创建ArrayList对象时，如果使用的是无参构造器，则初始elementData容量为0，第1次添加，则扩容elementData为10，如需要再次扩容，则扩容elementData为1.5倍。
 - 如果使用的是指定大小的构造器，则初始elementData容量为指定大小，如果需要扩容则直接扩容elementData为1.5倍。
+
+`跳过了P510&511 Arraylist底层源码1&2，时长60+mins`
+
+
 
 ##### Vector底层结构和源码剖析
 
@@ -2892,6 +2899,22 @@ for(int i=0; i<listsize(); i++){
 **Vector和ArrayList比较**
 
 ![Vector与ArrayList比较图](./javatests/pics/Vector与ArrayList比较图.png)
+
+```java
+//1.new Vertor()底层:
+public Vector(){
+    this(10);
+}
+//2.vertor.add(i)
+//执行添加数据到Vertor集合:
+public synchronized boolean add(E e){
+    ...
+        //这里面会调用ensureCapacityHelper方法，方法内确定是否需要扩容:条件->(minCapacity - elementData.length>0)
+        //如果要扩容，扩容算法核心
+        //newCapacity = oldCapacity + ((CapacityIncrement>0)?CapacityIncremeng:oldCapacity);
+        //该语句就是扩容2倍的大小，即2*oldCapacity
+}
+```
 
 
 
