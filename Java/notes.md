@@ -3605,18 +3605,74 @@ getName、getAbsolutePath、getParent、 length、exists、isFile、isDirectory
 
 ![IO流体系图](./javatests/pics/IO流体系图.png)
 
-FileInputStream
+###### FileInputStream
 
-FileOutputStream
-	![FileOutputStream图](./javatests/pics/FileOutputStream图.png)
+```java
+//FileInputStream(字节输入流，文件->程序)
 
-FileReader
+FileInputStream.read()
+    //从输入流读一个字节的数据，返回-1表示到达末尾已经读取完。
+//可以用这种方式：
+    FileInputStream fileInputStream = new FileInputStream(filePath);
+    while((Data = fileInputStream.read()) != -1){...}
+//使用好要关闭(会导致多个流指向一个文件，造成资源浪费)
+	fileInputStream.close();
+
+//单个字节的读取，效率比较低，因此往往会使用read(byte[] b)
+//从输入流读取最多b.length字节的数据到字节数组
+int datalen = 0;
+byte[] buf = new byte[8];//表示一次读取8个字节
+while((datalen = fileInputStream.read(buf)) != -1){...}
+//输出方法:
+System.out.print(new String(buf, 0, datalen));
+```
+
+
+
+###### FileOutputStream
+
+​	![FileOutputStream图](./javatests/pics/FileOutputStream图.png)
+
+```java
+//FileOutputStream
+//写入文件时如果文件不存在会创建文件
+String filepath = "d:\\114514.txt";
+FileOutputStream fileOutputStream = null;
+try{
+    fileOutputStream = new FileOutputStream(filepath);
+    ...
+    //(写入字节fileOutputStream.write())
+    //str.getBytes()  字符串->字节数组  以此来写入字符串
+}catch(IOException e){
+    e.printStackTrace();
+}finally{
+    try{
+        fileOutputStream.close();
+    }catch(IOException e){
+        e.printStackTrace();
+    }
+}
+
+
+//new FileOutputStream(filepath)方式写入内容会覆盖原来的内容
+//new FileOutputStream(filepath,true)方式，追加到文件的结尾
+
+
+FileCopy//文件拷贝
+//核心为:
+byte[] buf = new byte[1024];
+int readLen = 0;
+while ((readLen = fileInputstream.read(buf)) != -1){
+    fileQutputStream.write(buf, 0 readLen);
+    //一定要用这个方法
+}
+```
+
+
+
+###### FileReader
 
 ​	![FileReader图](./javatests/pics/FileReader图.png)
-
-FileWriter
-
-​	![FileWriter图](./javatests/pics/FileWriter图.png)
 
 FileReader相关方法
 
@@ -3625,6 +3681,45 @@ FileReader相关方法
 3. read(char[]): 批量读取多个字符到数组，返回读取到的字符数，如果到文件未尾返回相关API:
    1. new String(char[]):将char[]转换成String
    2. new String(char[],off,len):将char[]的指定部分转换成String
+
+
+
+```java
+
+String filePath = "d:\\1919810.txt";
+FileReader fileReader = null;
+int data = 0;
+//字符数组读取上面一行换成下面两行
+int readLen = 0;
+char[] buf = new char[8];
+
+try{
+    fileReader = new FileReader(filePath);
+    //循环读取使用read,单个字符读取
+    while ((data = fileReader.read()) != -1){
+        //字符数组使用while ((readLen = fileReader.read(buf)) != -1)
+        System.out.print((char)data);
+        //字符数组输出：
+        System.out.print(new String(buf, 0, readLen));
+    }
+}catch(IOException e){
+    e.printStackTrace();
+}finally{
+    try{
+        if(fileReader != null){
+        	fileReader.close();
+    	}
+    }catch(IOException e){
+        e.printStackTrace();
+    }
+}
+```
+
+
+
+###### FileWriter
+
+​	![FileWriter图](./javatests/pics/FileWriter图.png)
 
 FileWriter常用方法
 
@@ -3637,13 +3732,17 @@ FileWriter常用方法
 7. write(string,off,len):写入字符串的指定部分
    相关API: String类: toCharArray:将String转换成char[]
 
- 注意:
+ **注意:**
 FileWriter使用后，必须要关闭(close)或刷新(flush)，否则写入不到指定的文件!
+
+
 
 ##### 字节流和处理流
 
-- 节点流可以从一个特定的数据源读写数据，如FileReader、FileWriter
-- 处理流(也叫包装流是“连接”在已存在的流(节点流或处理流)之上，为程序提供更为强大的读写功能，也更加灵活, 如BufferedReader、BufferedWriter
+- 节点流可以从一个特定的数据源**读写数据**，如FileReader、FileWriter
+- 处理流(也叫**包装流**)是“连接”在已存在的流(节点流或处理流)之上，为程序提供更为强大的读写功能，也更加灵活, 如BufferedReader、BufferedWriter
+
+
 
 一览图
 
