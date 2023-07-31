@@ -4298,25 +4298,30 @@ Method method1 = cls.getMethod(methodName);
 //(4) 通过method1 调用方法: 即通过方法对象来实现调用方法
 System.out.println("=============================");
 method1.invoke(o); //传统方法 对象.方法() , 反射机制 方法.invoke(对象)
+
+
+//反射优化
+method.setAccessible(true);
 ```
 
 
 
 ##### Class类
 
-Class也是类，因此也继承Object类
+- Class也是类，因此也继承Object类
 
-Class类对象不是new出来的，而是系统创建的
+- Class类对象不是new出来的，而是系统创建的
 
-对于某个类的Class类对象，在内存中只有一份，因为类只加载一次
+- 对于某个类的Class类对象，在内存中只有一份，因为类只加载一次
 
-每个类的实例都会记得自己是由哪个 Class 实例所生成
+- 每个类的实例都会记得自己是由哪个 Class 实例所生成
 
-通过Class对象可以完整地得到一个类的完整结构,通过一系列API
+- 通过Class对象可以完整地得到一个类的完整结构,通过一系列API
 
-Class对象是存放在堆的
+- Class对象是存放在堆的
 
-类的字节码二进制数据，是放在方法区的，有的地方称为类的元数据(包括方法代码变量名，方法名，访问权限等等) https://www.zhihu.com/question/38496907
+- 类的字节码二进制数据，是放在方法区的，有的地方称为类的元数据(包括方法代码变量名，方法名，访问权限等等) https://www.zhihu.com/question/38496907
+
 
 **常用方法**
 
@@ -4435,11 +4440,12 @@ java.lang.reflect.Method 类:
 
 java.lang.reflect.Constructor 类
 
-getModifiers: 以int形式返回修饰符
+1. getModifiers: 以int形式返回修饰符
 
-getName:返回构造器名 (全类名)
+2. getName:返回构造器名 (全类名)
 
-getParameterTypes:以Class[]返回参数类型数组
+3. getParameterTypes:以Class[]返回参数类型数组
+
 
 
 
@@ -4454,6 +4460,8 @@ getParameterTypes:以Class[]返回参数类型数组
 - Constructor类相关方法
 - setAccessible:暴破
 - newInstance(Object...obj):调用构造器
+
+
 
 ##### 通过反射访问类中的成员
 
@@ -4474,6 +4482,8 @@ getParameterTypes:以Class[]返回参数类型数组
 3. 暴破 : m.setAccessible(true);
 4. 访问:Object returnValue = m.invoke(o,实参列表)://o 就是对象
 5. 注意: 如果是静态方法，则invoke的参数o，可以写成null!
+
+
 
 #### 第24章 MYSQL
 
