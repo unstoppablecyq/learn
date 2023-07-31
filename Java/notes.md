@@ -3748,7 +3748,7 @@ FileWriter使用后，必须要关闭(close)或刷新(flush)，否则写入不�
 
 ![字节流和处理流一览图](./javatests/pics/字节流和处理流一览图.png)
 
-**字节流和处理流的区别和联系**
+**节点流和处理流的区别和联系**
 
 - 节点流是底层流/低级流,直接跟数据源相接
 - 处理流(**包装流**)包装节点流，既可以消除不同节点流的实现差异，也可以提供更方便的方法来完成输入输出。
@@ -3764,40 +3764,207 @@ FileWriter使用后，必须要关闭(close)或刷新(flush)，否则写入不�
 - 都属于字符流，是anz凹字符来读取数据的
 - 关闭时处理流，只需要关闭外层流即可
 
+BufferedReader
+
+```java
+//BufferedReader
+        String filepath = "d:\\test.java";
+        BufferedReader bufferedReader = new BufferedReader(new FileReader(filepath));
+        //读取
+        String line;//按行读取效率高
+        //bufferedReader.readLine() 按行读取文件
+        while ((line = bufferedReader.readLine()) != null) {
+            System.out.print(line);
+        }
+        //关闭流只需要关闭BufferedReader，因为底层的文件会关闭节点流
+        bufferedReader.close();
+```
+
+BufferedWriter
+
+```java
+//BufferedWriter
+        String filepath = "d:\\test.txt";
+        //覆盖方式
+        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filepath));
+        //加一个true表示追加模式
+        //BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filepath,true));
+        bufferedWriter.write("我测，丁真");
+        bufferedWriter.newLine();//插入一个和系统相关的换行符
+        bufferedWriter.write("just because you so beautiful");
+        bufferedWriter.close();
+```
+
+Buffered拷贝
+
+```java
+//Buffered拷贝
+//按照字符操作，不要操作二进制文件，否则可能造成文件损坏
+        String srcFilePath = "d:\\原文件.txt";
+        String destFilePath = "d:\\目标文件.txt";
+        BufferedReader br = null;
+        BufferedWriter bw = null;
+        String line;
+            
+        try {
+            br = new BufferedReader(new FileReader(srcFilePath));
+            bw = new BufferedWriter(new FileWriter(destFilePath));
+            //
+            while ((line = br.readLine()) != null){
+                //读一行就写入，readLine只读取一行内容，但是没有换行
+                bw.write(line);
+                bw.newLine();
+            }
+            System.out.println("ok");
+            
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            //关闭流
+            try {
+                if (br != null){
+                    br.close();
+                }
+                if (bw != null) {
+                    bw.close();
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+```
+
+
+
 **处理流-BufferedInputStream和BufferedOutputStream**
 
 - BufferedInputStream是字节流，在创建BufferedInputStream时会创建一个内部缓冲区数组。
 - BufferedOutputStream是字节流，实现缓冲的输出流，可以将多个字节写入底层输出流中，而不必对每次字节写入调用底层系统
 
+```java
+//演示:二进制文件copy
+//字节流既可以操作二进制文件，也可以操作文本文件        
+		String srcFilePath = "e:\\Koala.jpg";
+        String destFilePath = "e:\\hsp.jpg";
+        //创建BufferedOutputStream对象BufferedInputStream对象
+        BufferedInputStream bis = null;
+        BufferedOutputStream bos = null;
+
+        try {
+            //因为 FileInputStream  是 InputStream 子类
+            bis = new BufferedInputStream(new FileInputStream(srcFilePath));
+            bos = new BufferedOutputStream(new FileOutputStream(destFilePath));
+            //循环的读取文件，并写入到 destFilePath
+            byte[] buff = new byte[1024];
+            int readLen = 0;
+            //当返回 -1 时，就表示文件读取完毕
+            while ((readLen = bis.read(buff)) != -1) {
+                bos.write(buff, 0, readLen);
+            }
+            System.out.println("文件拷贝完毕~~~");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            //关闭流 , 关闭外层的处理流即可，底层会去关闭节点流
+            try {
+                if(bis != null) {
+                    bis.close();
+                }
+                if(bos != null) {
+                    bos.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+```
+
+
+
+
+
 **对象流-ObjectInputStream和ObjectOutputStream**
 
-- 序列化和反序列化
+序列化和反序列化
+
 - 序列化就是在保存数据时，保存**数据的值**和**数据类型**
-- 反序列化就是在恢复数据时，恢复**数据的值**和**数据类型**需要让某个对象支持序列化机制，则必须让其类是可序列化的，为了让某个类是可序列化的，该类必须实现如下两个接口之一:
-  - Serializable // 这是一个标记接口,没有方
+- 反序列化就是在恢复数据时，恢复**数据的值**和**数据类型**
+- 需要让某个对象支持序列化机制，则必须让其类是可序列化的，为了让某个类是可序列化的，该类必须实现如下两个接口之一:
+  - Serializable // 这是一个标记接口,没有方法
   - Externalizable // 该接口有方法需要实现，因此我们一般实现上面的 Serializable接口
 
 对象流：提供了对基本类型或对象类型的序列化和反序列化的方法
 
 ObjectInputStream提供序列化功能
 
+```java
+//完成数据的序列化
+		//序列化后，保存的文件格式，不是存文本，而是按照他的格式来保存
+        String filePath = "e:\\data.dat";
+        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filePath));
+        //序列化数据到 e:\data.dat
+        oos.writeInt(100);// int -> Integer (实现了 Serializable)
+        oos.writeBoolean(true);// boolean -> Boolean (实现了 Serializable)
+        oos.writeChar('a');// char -> Character (实现了 Serializable)
+        oos.writeDouble(9.5);// double -> Double (实现了 Serializable)
+        oos.writeUTF("韩顺平教育");//String
+        //保存一个dog对象
+        oos.writeObject(new Dog("旺财", 10, "日本", "白色"));
+        oos.close();
+        System.out.println("数据保存完毕(序列化形式)");
+```
+
 ObjectOutputStream提供反序列化功能
 
+```java
 
+
+        //指定反序列化的文件
+        String filePath = "e:\\data.dat";
+        ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filePath));
+        //1. 读取(反序列化)的顺序需要和你保存数据(序列化)的顺序一致
+        //2. 否则会出现异常
+        System.out.println(ois.readInt());
+        System.out.println(ois.readBoolean());
+
+        System.out.println(ois.readChar());
+        System.out.println(ois.readDouble());
+        System.out.println(ois.readUTF());
+        //dog 的编译类型是 Object , dog 的运行类型是 Dog
+        Object dog = ois.readObject();
+        System.out.println("运行类型=" + dog.getClass());
+        System.out.println("dog信息=" + dog);//底层 Object -> Dog
+        //这里是特别重要的细节:
+        //1. 如果我们希望调用Dog的方法, 需要向下转型
+        //2. 需要我们将Dog类的定义，放在到可以引用的位置
+        Dog dog2 = (Dog)dog;
+        System.out.println(dog2.getName()); //旺财..
+        //关闭流, 关闭外层流即可，底层会关闭 FileInputStream 流
+        ois.close();
+```
 
 **使用事项和注意说明**
 
 1. 读写顺序要一致
+
 2. 要求序列化或反序列化对象 ，需要实现Serializable
+
 3. 序列化的类中建议添加SerialVersionUID，为了提高版本的兼容性
+
 4. 序列化对象时，默认将里面所有属性都进行序列化，但除了static或transient修饰的成员
+
 5. 序列化对象时，要求里面属性的类型也需要实现序列化接口
+
 6. 序列化具备可继承性,也就是如果某类已经实现了序列化，则它的所有子类也已经默认实现了序列化
+
+   
 
 **标准输入输出流**
 
 - System.in.标准输，类型：InputStream，默认设备：键盘
 - System.out 标准输出，类型：PrintStream，默认设备：显示器
+
+
 
 **转换流-InputStreamReader 和 OutputStreamWriter**
 
@@ -3806,9 +3973,71 @@ ObjectOutputStream提供反序列化功能
 3. 当处理纯文本数据时，如果使用字符流效率更高，并且可以有效解决中文问题，所以建议将字节流转换成字符流
 4. 可以在使用时指定编码格式(比如 utf-8，gbk，gb2312，ISO8859-1等)
 
+InputStreamReader
+
+```java
+		String filePath = "e:\\a.txt";
+
+        //1. 把 FileInputStream 转成 InputStreamReader
+        //2. 指定编码 gbk
+        //InputStreamReader isr = new InputStreamReader(new FileInputStream(filePath), "gbk");
+        //3. 把 InputStreamReader 传入 BufferedReader
+        //BufferedReader br = new BufferedReader(isr);
+
+        //将2 和 3 合在一起:
+        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filePath), "gbk"));
+
+        //4. 读取
+        String s = br.readLine();
+        System.out.println("读取内容=" + s);
+        //5. 关闭外层流
+        br.close();
+```
+
+OutputStreamReader
+
+```java
+        String filePath = "e:\\hsp.txt";
+        String charSet = "utf-8";
+        OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(filePath), charSet);
+        osw.write("hi, 韩顺平教育");
+        osw.close();
+        System.out.println("按照 " + charSet + " 保存文件成功~");
+```
+
+
+
 **打印流-PrintStream和PrintWriter**
 
 打印流只有输出流没有输入流
+
+演示PrintStream
+
+```java
+//PrintStream
+//最基础的用法：
+PrintStream out = System.out;
+//在默认情况下，PrintStream 输出数据的位置是 标准输出，即显示器
+out.print("114514");        
+//因为print底层使用的是write , 所以我们可以直接调用write进行打印/输出
+out.write("韩顺平,你好".getBytes());
+
+out.close;
+
+//修改打印流输出的位置/设备
+System.setOut(new PrintStream("e:\\1919819.txt"));
+System.out.println("fk114514~");
+```
+
+演示PrintWriter
+
+```java
+//PrintWriter
+//PrintWriter printWriter = new PrintWriter(System.out);//=>直接输出到显示器
+PrintWriter printWriter = new PrintWriter(new FileWriter("e:\\f2.txt"));//=>输出到指定位置
+printWriter.print("hi,fku");
+printWriter.close();//flush + 关闭流, 才会将数据写入到文件..
+```
 
 
 
@@ -3838,7 +4067,33 @@ ObjectOutputStream提供反序列化功能
 http://tool.chinaz.com/tools/unicode.aspx 
 unicode码查询工具
 
+```java
+//1. 创建Properties 对象
+Properties properties = new Properties();
+//2. 加载指定配置文件
+properties.load(new FileReader("src\\mysql.properties"));
+//3. 把k-v显示控制台
+properties.list(System.out);
+//4. 根据key 获取对应的值
+String user = properties.getProperty("user");
+String pwd = properties.getProperty("pwd");
+System.out.println("用户名=" + user);
+System.out.println("密码是=" + pwd);
 
+
+//使用Properties 类来创建 配置文件, 修改配置文件内容
+Properties properties = new Properties();
+
+//如果该文件没有key 就是创建;有key ,就是修改
+properties.setProperty("charset", "utf8");
+properties.setProperty("user", "汤姆");
+//注意保存时，是中文的 unicode码值
+properties.setProperty("pwd", "888888");
+
+//将k-v 存储文件中即可
+properties.store(new FileOutputStream("src\\mysql2.properties"), null);
+System.out.println("保存配置文件成功~");
+```
 
 
 
@@ -4029,6 +4284,23 @@ Java反射机制可以完成：
 - Method和Field、Constructor对象都有setAccessible0方法
 - setAccessible作用是启动和禁用访问安全检查的开关
 - 参数值为true表示 反射的对象在使用时取消访问检查，提高反射的效率。参数值为false则表示反射的对象执行访问检查
+
+```java
+//使用反射机制
+//(1) 加载类, 返回Class类型的对象cls
+Class cls = Class.forName(classfullpath);
+//(2) 通过 cls 得到你加载的类 com.hspedu.Cat 的对象实例
+Object o = cls.newInstance();
+System.out.println("o的运行类型=" + o.getClass()); //运行类型
+//(3) 通过 cls 得到你加载的类 com.hspedu.Cat 的 methodName"hi"  的方法对象
+//    即：在反射中，可以把方法视为对象（万物皆对象）
+Method method1 = cls.getMethod(methodName);
+//(4) 通过method1 调用方法: 即通过方法对象来实现调用方法
+System.out.println("=============================");
+method1.invoke(o); //传统方法 对象.方法() , 反射机制 方法.invoke(对象)
+```
+
+
 
 ##### Class类
 
