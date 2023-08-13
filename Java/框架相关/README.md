@@ -18,7 +18,7 @@ SpringBoot基础（基于SpringBoot关于Spring的IOC、DI）
 
 SpringMVC
 
-MySQL(设计库表)
+MySQL(设计库表pr)
 
 JDBC Mybatis
 
