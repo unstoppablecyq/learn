@@ -1,0 +1,102 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>test_JSON</title>
+</head>
+<body>
+    
+</body>
+<script>
+    var user = {
+        name: "test001",
+        age: 114,
+        gender: "female",
+        yell(){
+            alert("测");
+        }
+    }   
+
+    alert(user.name);
+    user.yell();
+</script>
+</html> -->
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vue</title>
+    <script src="js/vue.js"></script>
+</head>
+<body>
+    <!-- <img id="h1" src="pic/123.png"/>
+
+    <div class="cls">cccc</div> <br>
+    <div class="cls">cyq</div>  <br>
+
+    <input type="checkbox" name="eat"> 0
+    <input type="checkbox" name="eat"> 1
+    <input type="checkbox" name="eat"> 2 -->
+    <div id="app">
+        <input type="text" v-model="message">
+        {{message}}
+    </div>
+</body>
+<script>
+    // window.alert("514");
+    // alert("114");
+
+    // alert (confirm("really?"));
+
+    // var i = 0;
+    // setInterval(function(){
+    //     i++;
+    //     console.log(i+"times");
+    // },2000);
+
+   /*  setTimeout(function(){
+        alert("啊?");
+    },3000); */
+
+    // alert(location.href);
+    // location.href = "http://cccccyq.icu";
+
+
+
+
+    // var img = document.getElementById('h1');
+    // alert(img);
+
+    // var divs = document.getElementsByTagName('div');
+    // for (let index = 0; index < divs.length; index++) {
+    //     alert(divs[index]);
+    // }
+
+        // var ins = document.getElementsByName('eat');
+        // for (let index = 0; index < ins.length; index++) {
+        //  alert(ins[index]);
+        // }
+    
+    // var divs = document.getElementsByClassName('cls');
+    // var divs1 = divs[0];
+
+    // divs1.innerHTML = "cyq666";
+    
+    new Vue({
+        el:"#app",//接管区域
+        data:{
+            message:"wtf"
+        }
+    })
+
+
+</script>
+
+
+</html>

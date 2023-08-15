@@ -1,0 +1,128 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>v-bind_test</title>
+    <script src="js/vue.js"></script>
+</head>
+<body>
+    <div id="vue_test1">
+        <a v-bind:href="url">cccccyq</a>
+        <a :href="url">cyq666</a>
+
+        <input type="text" v-model="url">
+    </div>
+</body>
+<script>
+    new Vue({
+        el:"#vue_test1",
+        data:{
+            url:"http://cccccyq.icu"
+        }
+    })
+</script>
+</html> -->
+
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>v-on</title>
+    <script src="js/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <input type="button" value="别点这个按钮" @click="ccc()">
+    </div>
+</body>
+<script>
+    new Vue({
+        el:"#app",
+        data:{
+
+        },
+        methods: {
+         ccc: function(){
+            alert("别点了");
+         }   
+        }
+    })
+</script>
+</html> -->
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>v-if</title>
+    <script src="js/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        age<input type="text" v-model="age">is:
+        <span v-if="age <= 25">young</span>
+        <span v-else-if="age > 25 && age <= 60">elder</span>
+        <span v-else>old</span>
+        <br>
+        <br>
+
+        age<input type="text" v-model="age">is:
+        <span v-show="age <= 25">young</span>
+        <span v-show="age > 25 && age <= 60">elder</span>
+        <span v-show="age > 60">old</span>
+    </div>
+</body>
+<script>
+    new Vue({
+        el:"#app",
+        data:{
+            age:20
+        },
+        methods: {
+            
+        }
+    })
+</script>
+</html> -->
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>v-for</title>
+    <script src="js/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <hr>
+        <div v-for="(addr,index) in addrs">
+            {{index+1}} : {{addr}}
+        </div>
+        <hr>
+    </div>
+</body>
+<script>
+    new Vue({
+        el:"#app",
+        data:{
+            addrs:["1","2","3","4","5"]
+        },
+        methods: {
+            
+        }
+    })
+</script>
+</html>
