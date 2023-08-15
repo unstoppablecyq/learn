@@ -13,7 +13,7 @@
 
 
 
-#### HTML&CSS
+### 1-HTML&CSS
 
 ##### 结构标签
 
@@ -322,6 +322,42 @@
 
 盒子的大小，其实就包括三个部分： border、padding、content，而margin外边距是不包括在盒子之内的。
 
+代码：
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>盒子模型</title>
+    <style>
+        div {
+            width: 200px;  /* 宽度 */
+            height: 200px;  /* 高度 */
+            box-sizing: border-box; /* 指定width height为盒子的高宽 */
+            background-color: aquamarine; /* 背景色 */
+            
+            padding: 20px 20px 20px 20px; /* 内边距, 上 右 下 左 , 边距都一行, 可以简写: padding: 20px;*/ 
+            border: 10px solid red; /* 边框, 宽度 线条类型 颜色 */
+            margin: 30px 30px 30px 30px; /* 外边距, 上 右 下 左 , 边距都一行, 可以简写: margin: 30px; */
+        }
+    </style>
+</head>
+
+<body>
+    
+    <div>
+        A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A A 
+    </div>
+
+</body>
+</html>
+```
+
+
+
 ##### 布局标签
 
 - 布局标签：实际开发网页中，会大量频繁的使用 div 和 span 这两个没有语义的布局标签。
@@ -425,9 +461,338 @@
 
 
 
-
+### 2-JavaScript-Vue
 
 #### JavaScript
+
+html完成了架子，css做了美化，但是网页是死的，我们需要给他注入灵魂，所以接下来我们需要学习JavaScript，这门语言会让我们的页面能够和用户进行交互。
+
+##### 引入方式
+
+**第一种方式：**内部脚本，将JS代码定义在HTML页面中
+
+- JavaScript代码必须位于&lt;script&gt;&lt;/script&gt;标签之间
+- 在HTML文档中，可以在任意地方，放置任意数量的&lt;script&gt;
+- 一般会把脚本置于&lt;body&gt;元素的底部，可改善显示速度
+
+例子：
+
+~~~html
+<script>
+    alert("Hello JavaScript")
+</script>
+~~~
+
+
+
+**第二种方式：**外部脚本将， JS代码定义在外部 JS文件中，然后引入到 HTML页面中
+
+- 外部JS文件中，只包含JS代码，不包含&ltscript&gt;标签
+- 引入外部js的&lt;script&gt;标签，必须是双标签
+
+例子：
+
+~~~html
+<script src="js/demo.js"></script>
+~~~
+
+注意：demo.js中只有js代码，没有&lt;script&gt;标签
+
+
+
+##### 基础语法
+
+###### 书写语法
+
+掌握了js的引入方式，那么接下来我们需要学习js的书写了，首先需要掌握的是js的书写语法，语法规则如下：
+
+- 区分大小写：与 Java 一样，变量名、函数名以及其他一切东西都是区分大小写的
+
+- 每行结尾的分号可有可无
+
+- 大括号表示代码块
+
+- 注释：
+
+  - 单行注释：// 注释内容
+
+  - 多行注释：/* 注释内容 */
+
+    
+
+我们需要借助js中3钟输出语句，来演示书写语法
+
+| api              | 描述             |
+| ---------------- | ---------------- |
+| window.alert()   | 警告框           |
+| document.write() | 在HTML 输出内容  |
+| console.log()    | 写入浏览器控制台 |
+
+
+
+###### 变量
+
+在js中，变量的声明和java中还是不同的。首先js中主要通过如下3个关键字来声明变量的：
+
+| 关键字 | 解释                                                         |
+| ------ | ------------------------------------------------------------ |
+| var    | 早期ECMAScript5中用于变量声明的关键字                        |
+| let    | ECMAScript6中新增的用于变量声明的关键字，相比较var，let只在代码块内生效 |
+| const  | 声明常量的，常量一旦声明，不能修改                           |
+
+在js中声明变量还需要注意如下几点：
+
+- JavaScript 是一门弱类型语言，变量可以存放不同类型的值 。
+- 变量名需要遵循如下规则：
+  - 组成字符可以是任何字母、数字、下划线（_）或美元符号（$）
+  - 数字不能开头
+  - 建议使用驼峰命名
+
+
+
+###### 数据类型和运算符
+
+虽然js是弱数据类型的语言，但是js中也存在数据类型，js中的数据类型分为 ：原始类型 和 引用类型，具体有如下类型
+
+| 数据类型  | 描述                                               |
+| --------- | -------------------------------------------------- |
+| number    | 数字（整数、小数、NaN(Not a Number)）              |
+| string    | 字符串，单双引皆可                                 |
+| boolean   | 布尔。true，false                                  |
+| null      | 对象为空                                           |
+| undefined | 当声明的变量未初始化时，该变量的默认值是 undefined |
+
+##### 函数
+
+###### 第一种定义格式
+
+第一种定义格式如下：
+
+~~~js
+function 函数名(参数1,参数2..){
+    要执行的代码
+}
+~~~
+
+因为JavaScript是弱数据类型的语言，所以有如下几点需要注意：
+
+- 形式参数不需要声明类型，并且JavaScript中不管什么类型都是let或者var去声明，加上也没有意义。
+- 返回值也不需要声明类型，直接return即可
+
+如下示例：
+
+~~~js
+function add(a, b){
+    return a + b;
+}
+~~~
+
+
+
+###### 第二种定义格式
+
+第二种可以通过var去定义函数的名字，具体格式如下：
+
+~~~js
+var functionName = function (参数1,参数2..){   
+	//要执行的代码
+}
+~~~
+
+##### JavaScript对象
+
+###### 基本对象-Array对象
+
+Array对象时用来定义数组的。常用语法格式有如下2种：
+
+方式1：
+
+~~~js
+var 变量名 = new Array(元素列表); 
+~~~
+
+例如：
+
+~~~js
+var arr = new Array(1,2,3,4); //1,2,3,4 是存储在数组中的数据（元素）
+~~~
+
+
+
+方式2：
+
+~~~js
+var 变量名 = [ 元素列表 ]; 
+~~~
+
+例如：
+
+~~~js
+var arr = [1,2,3,4]; //1,2,3,4 是存储在数组中的数据（元素）
+~~~
+
+
+
+**属性和方法**
+
+Array作为一个对象，那么对象是有属性和方法的，所以接下来我们介绍一下Array对象的属性和方法
+
+官方文档中提供了Array的很多属性和方法，但是我们只学习常用的属性和方法，如下图所示：
+
+属性：
+
+| 属性   | 描述                         |
+| :----- | :--------------------------- |
+| length | 设置或返回数组中元素的数量。 |
+
+方法：
+
+| 方法方法  | 描述                                             |
+| :-------- | :----------------------------------------------- |
+| forEach() | 遍历数组中的每个有值得元素，并调用一次传入的函数 |
+| push()    | 将新元素添加到数组的末尾，并返回新的长度         |
+| splice()  | 从数组中删除元素                                 |
+
+**length属性**
+
+length属性可以用来获取数组的长度，所以我们可以借助这个属性，来遍历数组中的元素，添加如下代码：
+
+~~~js
+var arr = [1,2,3,4];
+arr[10] = 50;
+	for (let i = 0; i < arr.length; i++) {
+	console.log(arr[i]);
+}
+~~~
+
+**forEach()函数**
+
+首先我们学习forEach()方法，顾名思义，这是用来遍历的，那么遍历做什么事呢？所以这个方法的参数，需要传递一个函数，而且这个函数接受一个参数，就是遍历时数组的值。修改之前的遍历代码如下：
+
+~~~js
+//e是形参，接受的是数组遍历时的值
+arr.forEach(function(e){
+     console.log(e);
+})
+~~~
+
+当然了，在ES6中，引入箭头函数的写法，语法类似java中lambda表达式，修改上述代码如下：
+
+~~~js
+arr.forEach((e) => {
+     console.log(e);
+}) 
+~~~
+
+**push()函数**
+
+push()函数是用于向数组的末尾添加元素的，其中函数的参数就是需要添加的元素，编写如下代码：向数组的末尾添加3个元素
+
+~~~js
+//push: 添加元素到数组末尾
+arr.push(7,8,9);
+console.log(arr);
+~~~
+
+**splice()函数**
+
+splice()函数用来数组中的元素，函数中填入2个参数。
+
+参数1：表示从哪个索引位置删除
+
+参数2：表示删除元素的个数
+
+如下代码表示：从索引2的位置开始删，删除2个元素
+
+~~~js
+//splice: 删除元素
+arr.splice(2,2);
+console.log(arr);
+~~~
+
+
+
+###### 基本对象-String对象
+
+###### 基本对象-JSON对象
+
+
+
+###### BOM对象-Window对象
+
+###### BOM对象-Location对象
+
+
+
+###### DOM对象-DOM介绍
+
+###### DOM对象-获取DOM对象
+
+
+
+###### 案例
+
+/
+
+##### JavaScript事件
+
+###### 介绍
+
+###### 事件绑定
+
+###### 常见事件
+
+###### 案例
+
+
+
+#### Vue
+
+##### 概述
+
+##### 快速入门
+
+##### Vue指令
+
+###### v-bind&v-model
+
+###### v-on
+
+###### v-if&v-show
+
+###### v-for
+
+###### 案例
+
+##### 生命周期
+
+
+
+### 3-Vue-Element
+
+### 4-Maven-SpringBootWeb入门
+
+### 5-SpringBootWeb请求响应
+
+### 6-MySQL
+
+### 7-MySQL
+
+### 8-MySQL-Mybatis入门
+
+### 9-Mybatis
+
+### 10-SpringBootWeb案例
+
+### 11-SpringBootWeb案例
+
+### 12-SpringBootWeb登录认证
+
+### 13-SpringBootWeb AOP
+
+### 14-SpringBoot原理
+
+### 15-maven高级
 
 
 
