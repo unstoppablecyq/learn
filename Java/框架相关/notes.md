@@ -1644,7 +1644,7 @@ Axios的使用比较简单，主要分为2步：
         method:"get",
         url:"http://localhost:8080/ajax-demo1/aJAXDemo1?username=zhangsan"
     }).then(function (resp){
-        alert(resp.data);
+        alert(resp.data);//成功回调函数
     })
     ~~~
 
@@ -2359,7 +2359,17 @@ nginx服务器的端口号是80，所以启动成功之后，我们浏览器直�
 
 如果80端口被占用，我们需要通过**conf/nginx.conf**配置文件来修改端口号。
 
+
+
+# 后端Web
+
 ### 4-Maven-SpringBootWeb入门
+
+
+
+
+
+
 
 ### 5-SpringBootWeb请求响应
 
@@ -2389,21 +2399,4 @@ nginx服务器的端口号是80，所以启动成功之后，我们浏览器直�
 
 
 
-
-
-
-
-
-
-
-
-## 后端Web
-
-Maven
-
-SpringBootWeb
-
-MySQL
-
-JDBC Mybatis
 

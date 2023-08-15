@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>axios</title>
+
+    <script src="js/axios-0.18.0.js"></script>
+
+</head>
+
+<body>
+
+    <input type="button" value="获取" onclick="get()">
+
+    <input type="button" value="删除" onclick="post()">
+
+
+</body>
+<script>
+
+
+    function get() {
+        axios({
+            method:"get",
+            url:"https://mock.apifox.cn/m1/3128855-0-default/emp/list"
+        }).then(result => {
+            console.log(result.data);//成功回调
+        })
+    }
+
+
+    function post() {
+        axios({
+            method:"post",
+            url:"https://mock.apifox.cn/m1/3128855-0-default/emp/deleteById",
+            data:"id=1"
+        }).then(result => {
+            console.log(result.data);//成功回调
+        })
+    }
+</script>
+</html>
+
+
+
+
+
+
