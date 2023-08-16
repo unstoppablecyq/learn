@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="GENERAL_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/springboot_webtest_02/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/web_test_springboot" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/web_test_springboot/springboot_webtest01/src/main/resources" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/sprintboot_webtest001" isTestSource="false" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>
