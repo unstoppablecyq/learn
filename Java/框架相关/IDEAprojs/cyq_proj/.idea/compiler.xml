@@ -12,12 +12,14 @@
         <module name="maven-projectB" />
         <module name="maven-projectC" />
         <module name="maven_proj01" />
+        <module name="testcase" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="11" />
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="testcase" options="-parameters" />
       <module name="testspringboot" options="-parameters" />
     </option>
   </component>
