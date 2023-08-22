@@ -18,15 +18,15 @@ import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 
-/**
- * @author cccccyq
- * @date 2023/8/22 9:49
- */
+
 public class Main {
     public static void main(String[] args) {
-        //国内访问需要做代理，国外服务器不需要，host填入代理IP，如果本地开vpn，一般就是本机ip地址，port根据vpn的port填写，一般是7890
+        /**
+         * 通过api key调用chatgpt-3.5
+         */
+        //国内访问需要做代理
         Proxy proxy = null;
-        //Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("host", port));
+        //Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("ip地址//", 7890));
         HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor(new OpenAILogger());
         httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient okHttpClient = new OkHttpClient
@@ -46,7 +46,7 @@ public class Main {
                 .build();
         //构建客户端，apiKey中填入获取到的OpenAI的key
         OpenAiClient openAiClient = OpenAiClient.builder()
-                .apiKey(Arrays.asList("sk-xxxxxxx"))
+                .apiKey(Arrays.asList("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"))
                 .okHttpClient(okHttpClient)
                 .build();
 
@@ -65,11 +65,14 @@ public class Main {
             messages.add(message);
 
             ChatCompletion chatCompletion = ChatCompletion.builder().messages(messages).build();
-            ChatCompletionResponse chatCompletionResponse = openAiClient.chatCompletion(chatCompletion);
-            System.out.println(chatCompletionResponse);
-            chatCompletionResponse.getChoices().forEach(e -> {
-                System.out.println("AI: " + e.getMessage().getContent());
-            });
+//            ChatCompletionResponse chatCompletionResponse = openAiClient.chatCompletion(chatCompletion);
+//            System.out.println(chatCompletionResponse);
+              openAiClient.chatCompletion(chatCompletion).getChoices().forEach(e->{
+                  System.out.println("gpt-3.5-turbo: " + e.getMessage().getContent());
+              });
+//            chatCompletionResponse.getChoices().forEach(e -> {
+//                System.out.println("gpt-3.5-turbo: " + e.getMessage().getContent());
+//            });
         }
     }
 
