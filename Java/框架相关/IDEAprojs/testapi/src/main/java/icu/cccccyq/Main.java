@@ -38,15 +38,15 @@ public class Main {
                 //自定义返回值拦截
                 .addInterceptor(new OpenAiResponseInterceptor())
                 //自定义超时时间
-                .connectTimeout(10, TimeUnit.SECONDS)
+                .connectTimeout(1000, TimeUnit.SECONDS)
                 //自定义超时时间
-                .writeTimeout(30, TimeUnit.SECONDS)
+                .writeTimeout(3000, TimeUnit.SECONDS)
                 //自定义超时时间
-                .readTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(3000, TimeUnit.SECONDS)
                 .build();
         //构建客户端，apiKey中填入获取到的OpenAI的key
         OpenAiClient openAiClient = OpenAiClient.builder()
-                .apiKey(Arrays.asList("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"))
+                .apiKey(Arrays.asList("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"))
                 .okHttpClient(okHttpClient)
                 .build();
 
