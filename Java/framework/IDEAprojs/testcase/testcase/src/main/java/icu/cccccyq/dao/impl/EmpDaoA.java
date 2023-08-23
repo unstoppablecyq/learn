@@ -4,9 +4,11 @@ import icu.cccccyq.dao.EmpDao;
 import icu.cccccyq.pojo.Emp;
 import icu.cccccyq.utils.XmlParserUtils;
 import icu.cccccyq.pojo.Emp;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public class EmpDaoA implements EmpDao {
     @Override
     public List<Emp> listEmp() {

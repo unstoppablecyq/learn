@@ -4,11 +4,14 @@ import icu.cccccyq.dao.EmpDao;
 import icu.cccccyq.dao.impl.EmpDaoA;
 import icu.cccccyq.pojo.Emp;
 import icu.cccccyq.service.EmpService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import java.util.List;
-
+@Component
 public class EmpServiceA implements EmpService {
-
-    private EmpDao empDao = new EmpDaoA();
+    @Autowired
+    private EmpDao empDao;
 
     @Override
     public List<Emp> listEmp() {

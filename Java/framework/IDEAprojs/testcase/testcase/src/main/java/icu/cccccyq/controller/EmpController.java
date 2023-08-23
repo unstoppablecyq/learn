@@ -4,14 +4,15 @@ import icu.cccccyq.pojo.Emp;
 import icu.cccccyq.pojo.Result;
 import icu.cccccyq.service.EmpService;
 import icu.cccccyq.service.impl.EmpServiceA;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
 public class EmpController {
-
-    private EmpService empService = new EmpServiceA();
+    @Autowired
+    private EmpService empService;
 
     @RequestMapping("/listEmp")
     public Result list(){

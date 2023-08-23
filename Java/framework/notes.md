@@ -4713,17 +4713,17 @@ public class ResponseController {
 >
 > 这样就可以让类、接口、方法的复杂度更低，可读性更强，扩展性更好，也更利用后期的维护。
 
-我们之前开发的程序呢，并不满足单一职责原则。下面我们来分析下之前的程序：
+分析下之前的程序：
 
 ![image-20221204191650390](assets/5/image-20221204191650390.png) 
 
-那其实我们上述案例的处理逻辑呢，从组成上看可以分为三个部分：
+上述案例的处理逻辑，从组成上看可以分为三个部分：
 
 - 数据访问：负责业务数据的维护操作，包括增、删、改、查等操作。
 - 逻辑处理：负责业务逻辑处理的代码。
 - 请求处理、响应数据：负责，接收页面的请求，给页面响应数据。
 
-按照上述的三个组成部分，在我们项目开发中呢，可以将代码分为三层：
+因此在项目开发中可以将代码分为三层：
 
 - Controller：控制层。接收前端发送的请求，对请求进行处理，并响应数据。
 - Service：业务逻辑层。处理具体的业务逻辑。
@@ -4737,12 +4737,6 @@ public class ResponseController {
 - Controller层调用Service层来进行逻辑处理（Service层处理完后，把处理结果返回给Controller层）
 - Serivce层调用Dao层（逻辑处理过程中需要用到的一些数据要从Dao层获取）
 - Dao层操作文件中的数据（Dao拿到的数据会返回给Service层）
-
-> 思考：按照三层架构的思想，如何要对业务逻辑(Service层)进行变更，会影响到Controller层和Dao层吗？ 
->
-> 答案：不会影响。 （程序的扩展性、维护性变得更好了）
-
-
 
 
 
@@ -4905,7 +4899,7 @@ public class EmpDaoA implements EmpDao {
 
 之前我们在编写代码时，需要什么对象，就直接new一个就可以了。 这种做法呢，层与层之间代码就耦合了，当service层的实现变了之后， 我们还需要修改controller层的代码。
 
- 那应该怎么解耦呢？
+ 解耦：
 
 - 首先不能在EmpController中使用new对象。代码如下：
 
@@ -5048,7 +5042,7 @@ public class EmpDaoA implements EmpDao {
 
 ###### IOC详解
 
-通过IOC和DI的入门程序呢，我们已经基本了解了IOC和DI的基础操作。接下来呢，我们学习下IOC控制反转和DI依赖注入的细节。
+IOC控制反转和DI依赖注入的细节。
 
 **1)bean的声明**
 
@@ -5187,7 +5181,7 @@ public class EmpDaoA implements EmpDao {
 
 推荐做法（如下图）：
 
-- 将我们定义的controller，service，dao这些包呢，都放在引导类所在包com.itheima的子包下，这样我们定义的bean就会被自动的扫描到
+- 将我们定义的controller，service，dao这些包呢，都放在引导类所在包icu.cccccyq的子包下，这样我们定义的bean就会被自动的扫描到
 
 ![image-20221204225815624](assets/5/image-20221204225815624.png)
 
@@ -6921,7 +6915,7 @@ public class LoginCheckFilter implements Filter {
   登录校验成功之后，可以正常访问相关业务操作页面
 
 
- 
+
 
 
 
