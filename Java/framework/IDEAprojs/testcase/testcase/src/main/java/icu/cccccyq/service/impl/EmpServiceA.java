@@ -20,6 +20,7 @@ public class EmpServiceA implements EmpService {
 
         //2. 对数据进行转换处理 - gender, job
         empList.stream().forEach(emp -> {
+
             //处理 gender 1: 男, 2: 女
             String gender = emp.getGender();
             if("1".equals(gender)){

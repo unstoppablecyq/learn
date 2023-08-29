@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="testspringboot" />
+        <module name="springboot-mybatis-crud" />
+        <module name="learn_project_001" />
+        <module name="testsb2" />
+        <module name="crud_mybatis" />
+        <module name="maven-projectA" />
+        <module name="maven-projectB" />
+        <module name="maven-projectC" />
+        <module name="sprintboot_webtest001" />
+        <module name="testcase" />
+        <module name="maven-project02" />
+        <module name="springboot-web-req-resp" />
+        <module name="test_mybatis_0" />
+        <module name="cyq_prpject_001" />
+        <module name="maven_proj01" />
+        <module name="testapi" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel target="11">
+      <module name="cccccyq_project_001" target="11" />
+      <module name="cyq_project_001" target="11" />
+      <module name="cyq_prpject_001" target="17" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="cccccyq_project_001" options="-parameters" />
+      <module name="crud_mybatis" options="-parameters" />
+      <module name="cyq_project_001" options="-parameters" />
+      <module name="cyq_prpject_001" options="-parameters" />
+      <module name="learn_project_001" options="-parameters" />
+      <module name="springboot-mybatis-crud" options="-parameters" />
+      <module name="springboot-web-req-resp" options="-parameters" />
+      <module name="sprintboot_webtest001" options="-parameters" />
+      <module name="test_mybatis_0" options="-parameters" />
+      <module name="testcase" options="-parameters" />
+      <module name="testsb2" options="-parameters" />
+      <module name="testspringboot" options="-parameters" />
+    </option>
+  </component>
+</project>

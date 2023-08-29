@@ -5244,6 +5244,8 @@ public class EmpDaoA implements EmpDao {
 
 //基础内容，基本和MySQL学习内容重复，这里不再重新写一遍。
 
+Ctrl+Shift+L  整理格式
+
 ### 7-MySQL-02
 
 //基础内容，略

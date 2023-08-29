@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/testapi/pom.xml" />
+        <option value="$PROJECT_DIR$/testsb2/testsb2/pom.xml" />
+        <option value="$PROJECT_DIR$/cyq_proj/maven_proj01/pom.xml" />
+        <option value="$PROJECT_DIR$/cyq_proj/maven-projectA/pom.xml" />
+        <option value="$PROJECT_DIR$/cyq_proj/maven-projectB/pom.xml" />
+        <option value="$PROJECT_DIR$/cyq_proj/maven-projectC/pom.xml" />
+        <option value="$PROJECT_DIR$/cyq_proj/testspringboot/testspringboot/pom.xml" />
+        <option value="$PROJECT_DIR$/cyq_proj/maven-project02/pom.xml" />
+        <option value="$PROJECT_DIR$/cyq_proj/sprintboot_webtest001/pom.xml" />
+        <option value="$PROJECT_DIR$/cyq_proj/springboot-web-req-resp/springboot-web-req-resp/pom.xml" />
+        <option value="$PROJECT_DIR$/testcase/testcase/pom.xml" />
+        <option value="$PROJECT_DIR$/crud_mybatis/crud_mybatis/pom.xml" />
+        <option value="$PROJECT_DIR$/test_mybatis_0/test_mybatis_0/pom.xml" />
+        <option value="$PROJECT_DIR$/springboot-mybatis-crud/pom.xml" />
+        <option value="$PROJECT_DIR$/cyq_project_001/cyq_project_001/pom.xml" />
+        <option value="$PROJECT_DIR$/cyq_prpject_001/cyq_prpject_001/pom.xml" />
+        <option value="$PROJECT_DIR$/cccccyq_project_001/cccccyq_project_001/pom.xml" />
+        <option value="$PROJECT_DIR$/learn_project_001/learn_project_001/pom.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_17" default="true" project-jdk-name="17" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/out" />
+  </component>
+</project>

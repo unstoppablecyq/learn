@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/IDEAprojs.iml" filepath="$PROJECT_DIR$/.idea/IDEAprojs.iml" />
+      <module fileurl="file://$PROJECT_DIR$/springboot-mybatis-crud/springboot-mybatis-crud.iml" filepath="$PROJECT_DIR$/springboot-mybatis-crud/springboot-mybatis-crud.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cyq_proj/springboot-web-req-resp/springboot-web-req-resp/springboot-web-req-resp.iml" filepath="$PROJECT_DIR$/cyq_proj/springboot-web-req-resp/springboot-web-req-resp/springboot-web-req-resp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cyq_proj/sprintboot_webtest001/sprintboot_webtest001.iml" filepath="$PROJECT_DIR$/cyq_proj/sprintboot_webtest001/sprintboot_webtest001.iml" />
+      <module fileurl="file://$PROJECT_DIR$/testapi/testapi.iml" filepath="$PROJECT_DIR$/testapi/testapi.iml" />
+    </modules>
+  </component>
+</project>
