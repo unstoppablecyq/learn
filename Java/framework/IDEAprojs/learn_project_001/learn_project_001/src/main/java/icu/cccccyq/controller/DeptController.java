@@ -52,4 +52,28 @@ public class DeptController {
         deptService.add(dept);
         return Result.success();
     }
+//    @PostMapping
+//    public Result update(@RequestBody Dept dept2){
+//        log.info("更新内容:{}", dept2);
+//        deptService.update(dept2);
+//        return Result.success();
+//    }
+
+    @GetMapping("{id}")
+    public Result search(@PathVariable Integer id){
+        log.info("根据id:{}查询内容", id);
+
+        List<Dept> deptList = deptService.search(id);
+        return Result.success(deptList);
+
+    }
+
+
+    @PutMapping ()
+    public Result update(@RequestBody Dept dept){
+        log.info("更新内容:{}", dept);
+        deptService.update(dept);
+        return Result.success();
+    }
+
 }

@@ -26,4 +26,17 @@ public interface DeptService {
      * @param dept
      */
     void add(Dept dept);
+
+    /**
+     * 根据id查询信息
+     * @param id
+     * @return
+     */
+    List<Dept> search(Integer id);
+
+    /**
+     * 修改信息
+     * @param dept
+     */
+    void update(Dept dept);
 }
