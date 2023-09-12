@@ -1,5 +1,6 @@
 package icu.cccccyq.controller;
 
+import icu.cccccyq.anno.Log;
 import icu.cccccyq.pojo.Dept;
 import icu.cccccyq.pojo.Result;
 import icu.cccccyq.service.DeptService;
@@ -36,6 +37,7 @@ public class DeptController {
         return Result.success(deptList);
     }
 
+    @Log
     @DeleteMapping("{id}")
     public Result delete(@PathVariable Integer id){
         log.info("删除id对应内容");
@@ -45,6 +47,7 @@ public class DeptController {
     }
 
 //    新增
+    @Log
     @PostMapping()
     public Result add(@RequestBody Dept dept){
         log.info("新增内容:{}",dept);
@@ -68,7 +71,7 @@ public class DeptController {
 
     }
 
-
+    @Log
     @PutMapping ()
     public Result update(@RequestBody Dept dept){
         log.info("更新内容:{}", dept);

@@ -20,6 +20,7 @@
         <module name="maven-project02" />
         <module name="springboot-web-req-resp" />
         <module name="test_mybatis_0" />
+        <module name="demo_for_20230904" />
         <module name="cyq_prpject_001" />
         <module name="maven_proj01" />
         <module name="testapi" />
@@ -37,6 +38,7 @@
       <module name="crud_mybatis" options="-parameters" />
       <module name="cyq_project_001" options="-parameters" />
       <module name="cyq_prpject_001" options="-parameters" />
+      <module name="demo_for_20230904" options="-parameters" />
       <module name="learn_project_001" options="-parameters" />
       <module name="springboot-mybatis-crud" options="-parameters" />
       <module name="springboot-web-req-resp" options="-parameters" />
