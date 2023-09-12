@@ -16,8 +16,8 @@ mybatis:
 aliyun:
   oss:
     endpoint: https://oss-cn-shanghai.aliyuncs.com
-    accessKeyId: LTAI5tSo5woQzSKqLMWK9xDR
-    accessKeySecret: TRgv40TQ4Zb9t6DObLTpCHUbpdAW02
+    accessKeyId:
+    accessKeySecret:
     bucketName: cyq-project-001
 logging:
   level:
