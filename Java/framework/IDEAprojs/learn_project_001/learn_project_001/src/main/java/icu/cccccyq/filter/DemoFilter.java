@@ -9,10 +9,12 @@ import java.io.IOException;
  */
 //@WebFilter(urlPatterns = "/*")
 public class DemoFilter implements Filter {
+
     @Override//初始化,就调用一次
     public void init(FilterConfig filterConfig) throws ServletException {
 //        Filter.super.init(filterConfig);
         System.out.println("初始化");
+
     }
 
     @Override//拦截请求之后调用,调用多次
