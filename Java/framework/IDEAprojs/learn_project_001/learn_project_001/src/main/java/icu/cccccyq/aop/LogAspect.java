@@ -23,8 +23,10 @@ import java.util.Arrays;
 @Component
 @Aspect
 public class LogAspect {
+
     @Autowired
     private HttpServletRequest request;
+
     @Autowired
     private OperateLogMapper operateLogMapper;
 
@@ -35,16 +37,12 @@ public class LogAspect {
         String jwt = request.getHeader("token");
         Claims claims = JwtUtils.parseJWT(jwt);
         Integer operateUser = (Integer) claims.get("id");
-
         //操作时间
         LocalDateTime operateTime = LocalDateTime.now();
-
         //操作类类名
         String className = joinPoint.getTarget().getClass().getName();
-
         //方法名
         String methodName = joinPoint.getSignature().getName();
-
         //传入参数
         Object[] args = joinPoint.getArgs();
         String methodParams = Arrays.toString(args);

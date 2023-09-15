@@ -9,10 +9,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 /**
  * @author cccccyq
  */
+
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
+
     @Autowired
     private LoginCheckInterceptor loginCheckInterceptor;
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(loginCheckInterceptor).addPathPatterns("/**").excludePathPatterns("/login");
