@@ -8,6 +8,7 @@ spring:
     multipart:
       max-file-size: 100MB
       max-request-size: 1000MB
+
 mybatis:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
@@ -21,6 +22,7 @@ aliyun:
     accessKeySecret:
 #      上面填入阿里云oss的key的id和secret，以防万一不同步至github
     bucketName: cyq-project-001
+
 logging:
   level:
     org.springframework.jdbc.support.JdbcTransationManager: debug
